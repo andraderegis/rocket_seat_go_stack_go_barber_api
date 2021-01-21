@@ -20,13 +20,7 @@
   "rules": {
     "prettier/prettier": "error",
     "import/extensions": "off",
-    "no-console": "off",
-    "max-len": [
-      "error",
-      {
-        "code": 120
-      }
-    ]
+    "no-console": "off"
   },
   "settings": {
     "import/resolver": {
