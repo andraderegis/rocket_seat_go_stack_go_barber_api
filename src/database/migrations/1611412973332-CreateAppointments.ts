@@ -28,6 +28,10 @@ export default class CreateAppointments1611412973332 implements MigrationInterfa
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('appointments');
+    const hasTable = await queryRunner.hasTable('appointments');
+
+    if (hasTable) {
+      await queryRunner.dropTable('appointments');
+    }
   }
 }
