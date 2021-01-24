@@ -8,7 +8,7 @@ export default class CreateAppointments1611412973332 implements MigrationInterfa
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid'
           },
@@ -38,10 +38,6 @@ export default class CreateAppointments1611412973332 implements MigrationInterfa
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const hasTable = await queryRunner.hasTable('appointments');
-
-    if (hasTable) {
-      await queryRunner.dropTable('appointments');
-    }
+    await queryRunner.dropTable('appointments');
   }
 }

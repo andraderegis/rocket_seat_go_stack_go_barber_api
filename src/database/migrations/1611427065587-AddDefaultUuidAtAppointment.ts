@@ -7,7 +7,7 @@ export default class AddDefaultUuidAtAppointment1611427065587 implements Migrati
       'id',
       new TableColumn({
         name: 'id',
-        type: 'varchar',
+        type: 'uuid',
         isPrimary: true,
         generationStrategy: 'uuid',
         default: 'uuid_generate_v4()'
@@ -16,10 +16,17 @@ export default class AddDefaultUuidAtAppointment1611427065587 implements Migrati
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const hasTable = await queryRunner.hasTable('appointments');
+    await queryRunner.dropTable('appointments');
 
-    if (hasTable) {
-      await queryRunner.dropTable('appointments');
-    }
+    await queryRunner.changeColumn(
+      'appointments',
+      'id',
+      new TableColumn({
+        name: 'id',
+        type: 'uuid',
+        isPrimary: true,
+        generationStrategy: 'uuid'
+      })
+    );
   }
 }
