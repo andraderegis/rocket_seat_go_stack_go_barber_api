@@ -5,7 +5,7 @@ import Appointement from '../models/appointment';
 import AppointmentRepository from '../repositories/appointment-repository';
 
 interface CreateAppointmentServiceDTO {
-  provider: string;
+  provider_id: string;
   date: Date;
 }
 
@@ -16,7 +16,7 @@ class CreateAppointmentService {
     this.appointmentRepository = getCustomRepository(AppointmentRepository);
   }
 
-  public async execute({ provider, date }: CreateAppointmentServiceDTO): Promise<Appointement> {
+  public async execute({ provider_id, date }: CreateAppointmentServiceDTO): Promise<Appointement> {
     const appointmentDate = startOfHour(date);
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(appointmentDate);
@@ -26,7 +26,7 @@ class CreateAppointmentService {
     }
 
     const appointment = this.appointmentRepository.create({
-      provider,
+      provider_id,
       date: appointmentDate
     });
 
