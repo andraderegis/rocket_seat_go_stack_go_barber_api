@@ -19,7 +19,6 @@ export default class AddDefaultUuidAtAppointment1611427065587 implements Migrati
     const hasTable = await queryRunner.hasTable('appointments');
 
     if (hasTable) {
-      console.log('hasTable: ', hasTable);
       await queryRunner.dropTable('appointments');
     }
   }
