@@ -5,7 +5,7 @@ import { getRepository } from 'typeorm';
 import uploadConfig from '../config/upload';
 import AppError from '../errors/AppError';
 
-import User from '../models/user';
+import User from '../models/User';
 
 interface UpdateUserAvatarServiceDTO {
   user_id: string;
