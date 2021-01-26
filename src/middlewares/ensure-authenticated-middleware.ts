@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
 import authConfig from '../config/auth';
+import AppError from '../errors/AppError';
 
 interface TokenPayLoad {
   iat: number;
@@ -11,13 +12,13 @@ interface TokenPayLoad {
 
 export default function ensureAuthenticatedMiddleware(
   request: Request,
-  response: Response,
+  _: Response,
   next: NextFunction
 ): void {
   const { authorization } = request.headers;
 
   if (!authorization) {
-    throw new Error('JWT token is missing.');
+    throw new AppError('JWT token is missing.', 401);
   }
 
   const [, token] = authorization.split(' ');
@@ -35,6 +36,6 @@ export default function ensureAuthenticatedMiddleware(
 
     return next();
   } catch {
-    throw new Error('Invalid JWT Token');
+    throw new AppError('Invalid JWT Token', 401);
   }
 }
