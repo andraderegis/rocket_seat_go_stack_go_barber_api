@@ -1,6 +1,6 @@
-import MockAppointmentsRepository from '@modules/appointments/repositories/mocks/MockAppointmentRepository';
+import MockAppointmentsRepository from '@modules/appointments/repositories/mocks/MockAppointmentsRepository';
 import AppError from '@shared/errors/AppError';
-import CreateAppointmentService from './CreateAppointmentService';
+import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
 describe('CreateAppointment', () => {
   it('should be able to create a new appointment', async () => {

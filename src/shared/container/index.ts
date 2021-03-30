@@ -8,6 +8,14 @@ import AppointmentsRepository from '@modules/appointments/infra/typeorm/reposito
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
+import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
+import BCryptHashProvider from '@modules/users/providers/hash/implementations/BCryptHashProvider';
+
+container.registerSingleton<IHashProvider>(
+  CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH,
+  BCryptHashProvider
+);
+
 container.registerSingleton<IAppointmentsRepository>(
   CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT,
   AppointmentsRepository

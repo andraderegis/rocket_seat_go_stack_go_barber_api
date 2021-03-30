@@ -3,5 +3,8 @@ export const CONTAINER_NAME_DEPENDENCIES = {
   REPOSITORY: {
     APPOINTMENT: 'AppointmentRepository',
     USERS: 'UsersRepository'
+  },
+  PROVIDER: {
+    HASH: 'HashProvider'
   }
 };

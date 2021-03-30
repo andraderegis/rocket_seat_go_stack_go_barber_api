@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
@@ -7,15 +6,19 @@ import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
-import IUsersRepository from '../repositories/IUsersRepository';
-import IAuthenticateUserServiceDTO from '../dtos/IAuthenticateUserServiceDTO';
-import IAuthenticateUserServiceResponseDTO from '../dtos/IAuthenticateUserServiceResponseDTO';
+import IAuthenticateUserServiceDTO from '@modules/users/dtos/IAuthenticateUserServiceDTO';
+import IAuthenticateUserServiceResponseDTO from '@modules/users/dtos/IAuthenticateUserServiceResponseDTO';
+import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 @injectable()
 class AuthenticateUserService {
   constructor(
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH)
+    private hashProvider: IHashProvider
   ) {
     //
   }
@@ -30,7 +33,7 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
-    const passwordMatched = await compare(password, user.password);
+    const passwordMatched = await this.hashProvider.compare(password, user.password);
 
     if (!passwordMatched) {
       throw new AppError('Incorrect email/password combination.', 401);
