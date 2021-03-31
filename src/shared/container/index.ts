@@ -8,16 +8,14 @@ import AppointmentsRepository from '@modules/appointments/infra/typeorm/reposito
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
+import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
+import UserTokensRepository from '@modules/users/infra/typeorm/repositories/UserTokensRepository';
+
 import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import BCryptHashProvider from '@modules/users/providers/hash/implementations/BCryptHashProvider';
 
 import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
 import DiskStorageProvider from '@shared/providers/storage/implementations/DiskStorageProvider';
-
-container.registerSingleton<IHashProvider>(
-  CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH,
-  BCryptHashProvider
-);
 
 container.registerSingleton<IAppointmentsRepository>(
   CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT,
@@ -29,6 +27,15 @@ container.registerSingleton<IUsersRepository>(
   UsersRepository
 );
 
+container.registerSingleton<IUserTokensRepository>(
+  CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USER_TOKENS,
+  UserTokensRepository
+);
+
+container.registerSingleton<IHashProvider>(
+  CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH,
+  BCryptHashProvider
+);
 container.registerSingleton<IStorageProvider>(
   CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE.DISK,
   DiskStorageProvider

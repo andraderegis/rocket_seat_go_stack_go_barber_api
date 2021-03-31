@@ -43,6 +43,6 @@ describe('CreateUser', () => {
 
     await createUserService.execute(userToCreate);
 
-    expect(createUserService.execute(userToCreate)).rejects.toBeInstanceOf(AppError);
+    await expect(createUserService.execute(userToCreate)).rejects.toBeInstanceOf(AppError);
   });
 });

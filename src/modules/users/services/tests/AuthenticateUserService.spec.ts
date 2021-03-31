@@ -50,7 +50,9 @@ describe('AuthenticateUser', () => {
       password: '123456'
     };
 
-    expect(authenticateUserService.execute(userToAuthenticate)).rejects.toBeInstanceOf(AppError);
+    await expect(authenticateUserService.execute(userToAuthenticate)).rejects.toBeInstanceOf(
+      AppError
+    );
   });
 
   it('should not be able authenticate user with wrong password', async () => {
@@ -75,6 +77,8 @@ describe('AuthenticateUser', () => {
       password: '12345'
     };
 
-    expect(authenticateUserService.execute(userToAuthenticate)).rejects.toBeInstanceOf(AppError);
+    await expect(authenticateUserService.execute(userToAuthenticate)).rejects.toBeInstanceOf(
+      AppError
+    );
   });
 });
