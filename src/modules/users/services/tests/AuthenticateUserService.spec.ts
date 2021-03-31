@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
-import CreateUserService from '@modules/users/services/CreateUserService';
 
 import MockUsersRepository from '@modules/users/repositories/mocks/MockUsersRespository';
 import MockHashProvider from '@modules/users/providers/hash/mocks/MockHashProvider';
@@ -13,7 +12,6 @@ describe('AuthenticateUser', () => {
     const mockHashProvider = new MockHashProvider();
     const mockUsersRepository = new MockUsersRepository();
 
-    const createUserService = new CreateUserService(mockUsersRepository, mockHashProvider);
     const authenticateUserService = new AuthenticateUserService(
       mockUsersRepository,
       mockHashProvider
@@ -30,7 +28,7 @@ describe('AuthenticateUser', () => {
       password: userToCreate.password
     };
 
-    const user = await createUserService.execute(userToCreate);
+    const user = await mockUsersRepository.create(userToCreate);
 
     const authenticateResponse = await authenticateUserService.execute(userToAuthenticate);
 
@@ -59,7 +57,6 @@ describe('AuthenticateUser', () => {
     const mockHashProvider = new MockHashProvider();
     const mockUsersRepository = new MockUsersRepository();
 
-    const createUserService = new CreateUserService(mockUsersRepository, mockHashProvider);
     const authenticateUserService = new AuthenticateUserService(
       mockUsersRepository,
       mockHashProvider
@@ -71,7 +68,7 @@ describe('AuthenticateUser', () => {
       password: '123456'
     };
 
-    await createUserService.execute(userToCreate);
+    await mockUsersRepository.create(userToCreate);
 
     const userToAuthenticate = {
       email: userToCreate.email,

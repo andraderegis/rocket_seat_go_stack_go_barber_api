@@ -5,6 +5,9 @@ export const CONTAINER_NAME_DEPENDENCIES = {
     USERS: 'UsersRepository'
   },
   PROVIDER: {
-    HASH: 'HashProvider'
+    HASH: 'HashProvider',
+    STORAGE: {
+      DISK: 'DiskStorageProvider'
+    }
   }
 };

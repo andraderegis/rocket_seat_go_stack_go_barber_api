@@ -1,22 +1,23 @@
 import { inject, injectable } from 'tsyringe';
-import fs from 'fs';
-import path from 'path';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
-import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 
-import IUsersRepository from '../repositories/IUsersRepository';
-import IUpdateUserAvatarServiceDTO from '../dtos/IUpdateUserAvatarServiceDTO';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
+import IUpdateUserAvatarServiceDTO from '@modules/users/dtos/IUpdateUserAvatarServiceDTO';
 
 @injectable()
 class UpdateUserAvatarService {
   constructor(
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE.DISK)
+    private storageProvider: IStorageProvider
   ) {
     //
   }
@@ -29,15 +30,12 @@ class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar);
-      const userAvatarExists = await fs.promises.stat(userAvatarFilePath);
-
-      if (userAvatarExists) {
-        await fs.promises.unlink(userAvatarFilePath);
-      }
+      await this.storageProvider.delete(user.avatar);
     }
 
-    user.avatar = avatarFileName;
+    const fileName = await this.storageProvider.save(avatarFileName);
+
+    user.avatar = fileName;
 
     return this.usersRepository.save(user);
   }
