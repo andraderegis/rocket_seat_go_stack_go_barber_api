@@ -1,9 +1,11 @@
 import { inject, injectable } from 'tsyringe';
+import { differenceInHours } from 'date-fns';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
 import AppError from '@shared/errors/AppError';
 
+import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import IResetPasswordServiceDTO from '@modules/users/dtos/IResetPasswordServiceDTO';
@@ -15,7 +17,10 @@ class ResetPasswordService {
     private usersRepository: IUsersRepository,
 
     @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.TOKEN.USER)
-    private userTokensRepository: IUserTokensRepository
+    private userTokensRepository: IUserTokensRepository,
+
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH)
+    private hashProvider: IHashProvider
   ) {
     //
   }
@@ -33,7 +38,13 @@ class ResetPasswordService {
       throw new AppError('User does not exits.');
     }
 
-    user.password = password;
+    const tokenCreatedAt = userToken.created_at;
+
+    if (differenceInHours(Date.now(), tokenCreatedAt.getTime()) > 2) {
+      throw new AppError('Token expired.');
+    }
+
+    user.password = await this.hashProvider.generate(password);
 
     await this.usersRepository.save(user);
   }
