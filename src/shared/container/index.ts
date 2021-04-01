@@ -14,8 +14,16 @@ import UserTokensRepository from '@modules/users/infra/typeorm/repositories/User
 import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import BCryptHashProvider from '@modules/users/providers/hash/implementations/BCryptHashProvider';
 
+import IMailProvider from '@shared/providers/mail/interfaces/IMailProvider';
+import EtherealMailProvider from '@shared/providers/mail/implementations/EtherealMailProvider';
+
 import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
 import DiskStorageProvider from '@shared/providers/storage/implementations/DiskStorageProvider';
+
+/*
+ - registerSingleton: only create a instance when it is required for usage
+ - registerInstance: create a instance even it is not required for usage
+*/
 
 container.registerSingleton<IAppointmentsRepository>(
   CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT,
@@ -30,6 +38,11 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<IUserTokensRepository>(
   CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USER_TOKENS,
   UserTokensRepository
+);
+
+container.registerInstance<IMailProvider>(
+  CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL,
+  new EtherealMailProvider()
 );
 
 container.registerSingleton<IHashProvider>(
