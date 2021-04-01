@@ -6,17 +6,23 @@ import MockUsersRepository from '@modules/users/repositories/mocks/MockUsersResp
 import MockHashProvider from '@modules/users/providers/hash/mocks/MockHashProvider';
 
 import AppError from '@shared/errors/AppError';
+import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+
+let mockHashProvider: IHashProvider;
+let mockUsersRepository: IUsersRepository;
+
+let authenticateUserService: AuthenticateUserService;
 
 describe('AuthenticateUser', () => {
+  beforeEach(() => {
+    mockHashProvider = new MockHashProvider();
+    mockUsersRepository = new MockUsersRepository();
+
+    authenticateUserService = new AuthenticateUserService(mockUsersRepository, mockHashProvider);
+  });
+
   it('should be able authenticate user', async () => {
-    const mockHashProvider = new MockHashProvider();
-    const mockUsersRepository = new MockUsersRepository();
-
-    const authenticateUserService = new AuthenticateUserService(
-      mockUsersRepository,
-      mockHashProvider
-    );
-
     const userToCreate = {
       name: 'Aerith Gainsborough',
       email: 'theflowergirl@example.com',
@@ -36,14 +42,6 @@ describe('AuthenticateUser', () => {
     expect(authenticateResponse.user).toEqual(user);
   });
   it('should not be able authenticate with non existing user', async () => {
-    const mockHashProvider = new MockHashProvider();
-    const mockUsersRepository = new MockUsersRepository();
-
-    const authenticateUserService = new AuthenticateUserService(
-      mockUsersRepository,
-      mockHashProvider
-    );
-
     const userToAuthenticate = {
       name: 'Aerith Gainsborough',
       email: 'theflowergirl@example.com',
@@ -56,14 +54,6 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able authenticate user with wrong password', async () => {
-    const mockHashProvider = new MockHashProvider();
-    const mockUsersRepository = new MockUsersRepository();
-
-    const authenticateUserService = new AuthenticateUserService(
-      mockUsersRepository,
-      mockHashProvider
-    );
-
     const userToCreate = {
       name: 'Aerith Gainsborough',
       email: 'theflowergirl@example.com',

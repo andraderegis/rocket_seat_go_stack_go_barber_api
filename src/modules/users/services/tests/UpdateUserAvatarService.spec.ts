@@ -5,17 +5,23 @@ import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarSer
 
 import MockStorageProvider from '@shared/providers/storage/mocks/MockStorageProvider';
 import MockUsersRepository from '@modules/users/repositories/mocks/MockUsersRespository';
+import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+
+let mockStorageProvider: IStorageProvider;
+let mockUsersRepository: IUsersRepository;
+
+let updateUserAvatarService: UpdateUserAvatarService;
 
 describe('UpdateUserAvatar', () => {
+  beforeEach(() => {
+    mockStorageProvider = new MockStorageProvider();
+
+    mockUsersRepository = new MockUsersRepository();
+
+    updateUserAvatarService = new UpdateUserAvatarService(mockUsersRepository, mockStorageProvider);
+  });
   it('should be able to update avatar', async () => {
-    const mockStorageProvider = new MockStorageProvider();
-    const mockUsersRepository = new MockUsersRepository();
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      mockUsersRepository,
-      mockStorageProvider
-    );
-
     const userToCreate = {
       name: 'Cloud Strife',
       email: 'cloudstrife@example.com',
@@ -33,14 +39,6 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('should not be able to update avatar from non existing user', async () => {
-    const mockStorageProvider = new MockStorageProvider();
-    const mockUsersRepository = new MockUsersRepository();
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      mockUsersRepository,
-      mockStorageProvider
-    );
-
     await expect(
       updateUserAvatarService.execute({
         user_id: 'non-existing-user',
@@ -50,18 +48,10 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('should delete old avatar when updating new one', async () => {
-    const mockStorageProvider = new MockStorageProvider();
-    const mockUsersRepository = new MockUsersRepository();
-
     /**
      * Verify if MockStorageProvider delete funcion was triggered
      */
     const deleteMockStorageProvider = jest.spyOn(mockStorageProvider, 'delete');
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      mockUsersRepository,
-      mockStorageProvider
-    );
 
     const userToCreate = {
       name: 'Cloud Strife',
