@@ -13,7 +13,7 @@ import IResetPasswordServiceDTO from '@modules/users/dtos/IResetPasswordServiceD
 @injectable()
 class ResetPasswordService {
   constructor(
-    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
+    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
     private usersRepository: IUsersRepository,
 
     @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.TOKEN.USER)

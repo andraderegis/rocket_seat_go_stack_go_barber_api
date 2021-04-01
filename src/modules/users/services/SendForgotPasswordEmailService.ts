@@ -11,7 +11,7 @@ import AppError from '@shared/errors/AppError';
 @injectable()
 class SendForgotPasswordEmailService {
   constructor(
-    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
+    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
     private usersRepository: IUsersRepository,
 
     @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL)
@@ -30,11 +30,11 @@ class SendForgotPasswordEmailService {
       throw new AppError('User does not exists.');
     }
 
-    await this.userTokensRepository.generate(user.id);
+    const { token } = await this.userTokensRepository.generate(user.id);
 
-    this.mailProvider.send({
+    return this.mailProvider.send({
       to: email,
-      body: 'Pedido de recuperação de senha recebido'
+      body: `Pedido de recuperação de senha recebido: ${token}`
     });
   }
 }
