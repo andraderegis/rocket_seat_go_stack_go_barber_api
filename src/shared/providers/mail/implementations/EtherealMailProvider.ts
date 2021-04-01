@@ -1,26 +1,43 @@
+import { inject, injectable } from 'tsyringe';
 import nodemailer, { Transporter } from 'nodemailer';
+
+import { CONTAINER_NAME_DEPENDENCIES, ERRORS, MAIL } from '@shared/constants';
 
 import IMailProvider from '@shared/providers/mail/interfaces/IMailProvider';
 import ISendEmailDTO from '@shared/providers/mail/dtos/ISendEmailDTO';
 import AppError from '@shared/errors/AppError';
+import IMailTemplateProvider from '@shared/providers/mail-template/interfaces/IMailTemplateProvider';
 
+@injectable()
 class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
 
-  constructor() {
+  constructor(
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL_TEMPLATE)
+    private mailTemplateProvider: IMailTemplateProvider
+  ) {
     this.init()
       .then()
       .catch(e => {
-        throw new AppError(`Cannot initialize EtherealMailProvider. Error: ${e.message}`, 500);
+        throw new AppError(
+          `${ERRORS.MESSAGES.PROVIDERS.ETHEREAL_MAIL.CANNOT_INITIALIZE}. Error: ${e.message}`,
+          500
+        );
       });
   }
 
-  public async send({ to, body }: ISendEmailDTO): Promise<void> {
+  public async send({ from, to, subject, templateData }: ISendEmailDTO): Promise<void> {
     const message = await this.client.sendMail({
-      from: 'Equipe GoBarber <equipe@gobarber.com.br>',
-      to,
-      subject: 'Recuperação de senha',
-      text: body
+      from: {
+        name: from?.name || MAIL.DATA_CONTENT.FROM.DEFAULT_NAME,
+        address: from?.email || MAIL.DATA_CONTENT.FROM.DEFAULT_ADDRESS
+      },
+      to: {
+        name: to.name,
+        address: to.email
+      },
+      subject,
+      html: await this.mailTemplateProvider.parse(templateData)
     });
 
     console.info(`Message sent: ${message.messageId}`);

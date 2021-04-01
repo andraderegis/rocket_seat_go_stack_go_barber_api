@@ -4,11 +4,8 @@ import ISendEmailDTO from '@shared/providers/mail/dtos/ISendEmailDTO';
 class FakeMailProvider implements IMailProvider {
   private messages: ISendEmailDTO[] = [];
 
-  public async send({ to, body }: ISendEmailDTO): Promise<void> {
-    this.messages.push({
-      to,
-      body
-    });
+  public async send(message: ISendEmailDTO): Promise<void> {
+    this.messages.push(message);
   }
 }
 

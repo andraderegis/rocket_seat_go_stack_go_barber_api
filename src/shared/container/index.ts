@@ -17,6 +17,9 @@ import BCryptHashProvider from '@modules/users/providers/hash/implementations/BC
 import IMailProvider from '@shared/providers/mail/interfaces/IMailProvider';
 import EtherealMailProvider from '@shared/providers/mail/implementations/EtherealMailProvider';
 
+import IMailTemplateProvider from '@shared/providers/mail-template/interfaces/IMailTemplateProvider';
+import HandlebarsMailTemplateProvider from '@shared/providers/mail-template/implementations/HandlebarsMailTemplateProvider';
+
 import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
 import DiskStorageProvider from '@shared/providers/storage/implementations/DiskStorageProvider';
 
@@ -40,9 +43,14 @@ container.registerSingleton<IUserTokensRepository>(
   UserTokensRepository
 );
 
+container.registerSingleton<IMailTemplateProvider>(
+  CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL_TEMPLATE,
+  HandlebarsMailTemplateProvider
+);
+
 container.registerInstance<IMailProvider>(
   CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL,
-  new EtherealMailProvider()
+  container.resolve(EtherealMailProvider)
 );
 
 container.registerSingleton<IHashProvider>(
