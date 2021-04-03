@@ -13,7 +13,7 @@ let mockUsersRepository: IUsersRepository;
 
 let updateProfileService: UpdateProfileService;
 
-describe('UpdateUserAvatar', () => {
+describe('UpdateProfile', () => {
   beforeEach(() => {
     mockHashProvider = new MockHashProvider();
 

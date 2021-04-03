@@ -8,9 +8,10 @@ import User from '@modules/users/infra/typeorm/entities/User';
 import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IUpdateProfileDTO from '../dtos/IUpdateProfileDTO';
+import IUserService from './interfaces/IUserService';
 
 @injectable()
-class UpdateProfileService {
+class UpdateProfileService implements IUserService {
   constructor(
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
     private usersRepository: IUsersRepository,

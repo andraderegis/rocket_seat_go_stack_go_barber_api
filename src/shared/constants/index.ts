@@ -1,8 +1,8 @@
 export const CONTAINER_NAME_DEPENDENCIES = {
-  REPOSITORY: {
-    APPOINTMENT: 'AppointmentsRepository',
-    USERS: 'UsersRepository',
-    USER_TOKENS: 'UserTokensRepository'
+  CONTROLLER: {
+    USER: {
+      PROFILE: 'ProfileController'
+    }
   },
   PROVIDER: {
     HASH: 'HashProvider',
@@ -13,6 +13,17 @@ export const CONTAINER_NAME_DEPENDENCIES = {
     },
     TOKEN: {
       USER: 'UserTokensRepository'
+    }
+  },
+  REPOSITORY: {
+    APPOINTMENT: 'AppointmentsRepository',
+    USERS: 'UsersRepository',
+    USER_TOKENS: 'UserTokensRepository'
+  },
+  SERVICE: {
+    USER: {
+      SHOW_PROFILE: 'ShowProfileService',
+      UPDATE_PROFILE: 'UpdateProfileService'
     }
   }
 };
