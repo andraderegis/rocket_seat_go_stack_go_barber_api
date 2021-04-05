@@ -4,6 +4,7 @@ import User from '@modules/users/infra/typeorm/entities/User';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUsersDTO from '@modules/users/dtos/ICreateUserDTO';
+import IFindAllProvidersDTO from '@modules/users/dtos/IFindlAllProvidersDTO';
 
 class MockUsersRepository implements IUsersRepository {
   private users: User[] = [];
@@ -17,6 +18,14 @@ class MockUsersRepository implements IUsersRepository {
     this.users.push(user);
 
     return user;
+  }
+
+  public async findAllProviders({ except_user_id }: IFindAllProvidersDTO): Promise<User[]> {
+    if (except_user_id) {
+      return this.users.filter(user => user.id !== except_user_id);
+    }
+
+    return this.users;
   }
 
   public async findById(id: string): Promise<User | undefined> {
