@@ -12,7 +12,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 @injectable()
 class CreateUserService {
   constructor(
-    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
+    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
     private usersRepository: IUsersRepository,
 
     @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH)
