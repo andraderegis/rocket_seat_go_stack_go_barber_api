@@ -6,7 +6,7 @@ import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IListProviderDTO from '@modules/users/dtos/IShowProfileDTO';
-import IListProviderService from './interfaces/IListProviderService';
+import IListProviderService from '@modules/appointments/services/interfaces/IListProviderService';
 
 @injectable()
 class ListProfileService implements IListProviderService {
