@@ -4,14 +4,14 @@ import { getDate, getDaysInMonth } from 'date-fns';
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
-import IListProviderMonthAvaiabilityDTO from '@modules/appointments/dtos/IListProviderMonthAvailabilityDTO';
-import IListProviderMonthAvaiabilityResponseDTO from '@modules/appointments/dtos/IListProviderMonthAvailabilityResponseDTO';
-import IListProviderMonthAvaiabilityService from '@modules/appointments/services/interfaces/IListProviderMonthAvailabilityService';
+import IListProviderMonthAvailabilityDTO from '@modules/appointments/dtos/IListProviderMonthAvailabilityDTO';
+import IListProviderMonthAvailabilityResponseDTO from '@modules/appointments/dtos/IListProviderMonthAvailabilityResponseDTO';
+import IListProviderDayAvailabilityService from '@modules/appointments/services/interfaces/IListProviderDayAvailabilityService';
 
 const APPOINTMENT_LIMIT_IN_DAY = 10;
 
 @injectable()
-class ListProviderMonthAvaiabilityService implements IListProviderMonthAvaiabilityService {
+class ListProviderDayAvailabilityService implements IListProviderDayAvailabilityService {
   constructor(
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
     private appointmentsRespository: IAppointmentsRepository
@@ -23,7 +23,7 @@ class ListProviderMonthAvaiabilityService implements IListProviderMonthAvaiabili
     provider_id,
     month,
     year
-  }: IListProviderMonthAvaiabilityDTO): Promise<IListProviderMonthAvaiabilityResponseDTO> {
+  }: IListProviderMonthAvailabilityDTO): Promise<IListProviderMonthAvailabilityResponseDTO> {
     const appointments = await this.appointmentsRespository.findAllInMonth({
       provider_id,
       year,
@@ -49,4 +49,4 @@ class ListProviderMonthAvaiabilityService implements IListProviderMonthAvaiabili
   }
 }
 
-export default ListProviderMonthAvaiabilityService;
+export default ListProviderDayAvailabilityService;

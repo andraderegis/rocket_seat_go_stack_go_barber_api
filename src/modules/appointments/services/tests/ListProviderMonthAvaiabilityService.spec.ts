@@ -2,18 +2,18 @@ import 'reflect-metadata';
 
 import MockAppointmentsRepository from '@modules/appointments/repositories/mocks/MockAppointmentsRepository';
 
-import ListProviderMonthAvaiabilityService from '@modules/appointments/services/ListProviderMonthAvaiabilityService';
+import ListProviderMonthAvailabilityService from '@modules/appointments/services/ListProviderMonthAvaiabilityService';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
-import IListProviderMonthAvaiabilityService from '../interfaces/IListProviderMonthAvaiabilityService';
+import IListProviderMonthAvailabilityService from '@modules/appointments/services/interfaces/IListProviderMonthAvailabilityService';
 
 let mockAppointmentsRepository: IAppointmentsRepository;
-let listProvidersMonthAvaiabilityService: IListProviderMonthAvaiabilityService;
+let listProvidersMonthAvailabilityService: IListProviderMonthAvailabilityService;
 
-describe('ListProviderMonthAvaiability', () => {
+describe('ListProviderMonthAvailability', () => {
   beforeEach(() => {
     mockAppointmentsRepository = new MockAppointmentsRepository();
-    listProvidersMonthAvaiabilityService = new ListProviderMonthAvaiabilityService(
+    listProvidersMonthAvailabilityService = new ListProviderMonthAvailabilityService(
       mockAppointmentsRepository
     );
   });
@@ -37,13 +37,13 @@ describe('ListProviderMonthAvaiability', () => {
 
     await Promise.all(createAppointments);
 
-    const avaiability = await listProvidersMonthAvaiabilityService.execute({
+    const Availability = await listProvidersMonthAvailabilityService.execute({
       provider_id: 'user',
       year: 2021,
       month: 4
     });
 
-    expect(avaiability).toEqual(
+    expect(Availability).toEqual(
       expect.arrayContaining([
         { day: 4, available: true },
         { day: 5, available: false },
