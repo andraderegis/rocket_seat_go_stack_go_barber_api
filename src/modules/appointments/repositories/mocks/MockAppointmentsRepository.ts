@@ -1,10 +1,13 @@
 import { v4 as uuid } from 'uuid';
-import { getMonth, getYear, isEqual } from 'date-fns';
+import { getDate, getMonth, getYear, isEqual } from 'date-fns';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllInMonthDTO from '@modules/appointments/dtos/IFindAllInMonthDTO';
+import IFindAllInDayDTO from '@modules/appointments/dtos/IFindAllInDayDTO';
+
+const TO_INCREMENT_FOR_JAVASCRIPT_DATE_FORMAT = 1;
 
 class MockAppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
@@ -21,6 +24,21 @@ class MockAppointmentsRepository implements IAppointmentsRepository {
     return appointment;
   }
 
+  public async findAllInDay({
+    provider_id,
+    day,
+    month,
+    year
+  }: IFindAllInDayDTO): Promise<Appointment[]> {
+    return this.appointments.filter(
+      appointment =>
+        appointment.provider_id === provider_id &&
+        getDate(appointment.date) === day &&
+        getMonth(appointment.date) + TO_INCREMENT_FOR_JAVASCRIPT_DATE_FORMAT === month &&
+        getYear(appointment.date) === year
+    );
+  }
+
   public async findAllInMonth({
     provider_id,
     month,
@@ -29,7 +47,7 @@ class MockAppointmentsRepository implements IAppointmentsRepository {
     return this.appointments.filter(
       appointment =>
         appointment.provider_id === provider_id &&
-        getMonth(appointment.date) + 1 === month &&
+        getMonth(appointment.date) + TO_INCREMENT_FOR_JAVASCRIPT_DATE_FORMAT === month &&
         getYear(appointment.date) === year
     );
   }

@@ -1,3 +1,11 @@
+import IListProviderDayAvailabilityDTO from '@modules/appointments/dtos/IListProviderDayAvailabilityDTO';
+import IListProviderDayAvailabilityResponseDTO from '@modules/appointments/dtos/IListProviderDayAvailabilityResponseDTO';
+
 export default interface IListProviderDayAvailabilityService {
-  execute(): Promise<void>;
+  execute({
+    provider_id,
+    day,
+    month,
+    year
+  }: IListProviderDayAvailabilityDTO): Promise<IListProviderDayAvailabilityResponseDTO>;
 }
