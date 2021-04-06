@@ -6,12 +6,14 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import IListProviderDayAvailabilityDTO from '@modules/appointments/dtos/IListProviderDayAvailabilityDTO';
 import IListProviderDayAvailabilityResponseDTO from '@modules/appointments/dtos/IListProviderDayAvailabilityResponseDTO';
 import IListProviderDayAvailabilityService from '@modules/appointments/services/interfaces/IListProviderDayAvailabilityService';
-import { getHours } from 'date-fns';
+import { getHours, isAfter } from 'date-fns';
 
 const APPOINTMENT_LIMITS = {
   START_HOUR: 8,
   QUANTITY_PER_DAY: 10
 };
+
+const TO_DECREMENT_VALUE_FOR_JAVASCRIPT_DATE_FORMAT = 1;
 
 @injectable()
 class ListProviderDayAvailabilityService implements IListProviderDayAvailabilityService {
@@ -45,9 +47,17 @@ class ListProviderDayAvailabilityService implements IListProviderDayAvailability
         appointment => getHours(appointment.date) === hour
       );
 
+      const currentDate = new Date(Date.now());
+      const appointmentToDoDate = new Date(
+        year,
+        month - TO_DECREMENT_VALUE_FOR_JAVASCRIPT_DATE_FORMAT,
+        day,
+        hour
+      );
+
       return {
         hour,
-        available: !hasAppointmentInHour
+        available: !hasAppointmentInHour && isAfter(appointmentToDoDate, currentDate)
       };
     });
 
