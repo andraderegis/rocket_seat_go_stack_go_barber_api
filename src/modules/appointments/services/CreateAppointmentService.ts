@@ -36,12 +36,7 @@ class CreateAppointmentService {
 
     const appointmentHour = getHours(appointmentDate);
 
-    if (
-      appointmentHour < APPOINTMENT_HOUR_INTERVAL_LIMIT.START ||
-      appointmentHour > APPOINTMENT_HOUR_INTERVAL_LIMIT.END
-    ) {
-      throw new AppError('Appointment only should be created between 8h (8am) and 17h (5pm)');
-    }
+    await this.checkAllowedAppointmentHourInterval(appointmentHour);
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(appointmentDate);
 
@@ -68,6 +63,15 @@ class CreateAppointmentService {
   ): Promise<void> {
     if (user_id === provider_id) {
       throw new AppError('Cannot create appointment with provider_id and user_id as same value');
+    }
+  }
+
+  private async checkAllowedAppointmentHourInterval(appointmentHour: number): Promise<void> {
+    if (
+      appointmentHour < APPOINTMENT_HOUR_INTERVAL_LIMIT.START ||
+      appointmentHour > APPOINTMENT_HOUR_INTERVAL_LIMIT.END
+    ) {
+      throw new AppError('Appointment only should be created between 8h (8am) and 17h (5pm)');
     }
   }
 }
