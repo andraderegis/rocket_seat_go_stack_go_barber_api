@@ -4,8 +4,9 @@ import { parseISO } from 'date-fns';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 import AppointmentRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
+import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
 
-class AppointmentsControler {
+class AppointmentsControler implements ICreateController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { id: user_id } = request.user;
 

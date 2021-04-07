@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
 
-class ProvidersController {
+import IIndexController from '@shared/infra/http/controllers/interfaces/express/IIndexController';
+
+class ProvidersController implements IIndexController {
   public async index(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
 
@@ -11,7 +13,7 @@ class ProvidersController {
 
     const providers = await listProvidersService.execute({ user_id });
 
-    return response.status(201).json(providers);
+    return response.status(200).json(providers);
   }
 }
 
