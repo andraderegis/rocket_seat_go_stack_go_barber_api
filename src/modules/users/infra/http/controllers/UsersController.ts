@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import CreateUserService from '@modules/users/services/CreateUserService';
 
-class UsersController {
+import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
+
+class UsersController implements ICreateController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, email, password } = request.body;
 

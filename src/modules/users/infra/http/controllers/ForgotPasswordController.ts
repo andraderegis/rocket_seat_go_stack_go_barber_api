@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import SendForgotPasswordEmailService from '@modules/users/services/SendForgotPasswordEmailService';
 
-class ForgotPasswordController {
+import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
+
+class ForgotPasswordController implements ICreateController {
   async create(request: Request, response: Response): Promise<Response> {
     const { email } = request.body;
 

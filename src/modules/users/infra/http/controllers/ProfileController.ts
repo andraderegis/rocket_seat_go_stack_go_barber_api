@@ -4,7 +4,10 @@ import { Request, Response } from 'express';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 import ShowProfileService from '@modules/users/services/ShowProfileService';
 
-class ProfileController {
+import IUpdateController from '@shared/infra/http/controllers/interfaces/express/IUpdateController';
+import IGetController from '@shared/infra/http/controllers/interfaces/express/IGetController';
+
+class ProfileController implements IGetController, IUpdateController {
   public async get(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
 

@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import ResetPasswordService from '@modules/users/services/ResetPasswordService';
 
-class ResetPasswordController {
+import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
+
+class ResetPasswordController implements ICreateController {
   async create(request: Request, response: Response): Promise<Response> {
     const { password, token } = request.body;
 

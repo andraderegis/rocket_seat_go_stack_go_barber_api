@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
 
-class SessionsController {
+import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
+
+class SessionsController implements ICreateController {
   async create(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 

@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
-class UserAvatarController {
+import IUpdateController from '@shared/infra/http/controllers/interfaces/express/IUpdateController';
+
+class UserAvatarController implements IUpdateController {
   public async update(request: Request, response: Response): Promise<Response> {
     const updateUserAvatarService = container.resolve(UpdateUserAvatarService);
 
