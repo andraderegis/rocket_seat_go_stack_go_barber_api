@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import { getHours, isBefore, startOfHour } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
@@ -7,7 +7,12 @@ import AppError from '@shared/errors/AppError';
 
 import Appointement from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
-import ICreateAppointmentDTO from '../dtos/ICreateAppointmentDTO';
+import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
+
+const APPOINTMENT_HOUR_INTERVAL_LIMIT = {
+  START: 8,
+  END: 17
+};
 
 @injectable()
 class CreateAppointmentService {
@@ -24,6 +29,23 @@ class CreateAppointmentService {
     date
   }: ICreateAppointmentDTO): Promise<Appointement> {
     const appointmentDate = startOfHour(date);
+
+    if (isBefore(appointmentDate, Date.now())) {
+      throw new AppError('Cannot create an appointment on a past date');
+    }
+
+    if (user_id === provider_id) {
+      throw new AppError('Cannot create appointment with provider_id and user_id as same value');
+    }
+
+    const appointmentHour = getHours(appointmentDate);
+
+    if (
+      appointmentHour < APPOINTMENT_HOUR_INTERVAL_LIMIT.START ||
+      appointmentHour > APPOINTMENT_HOUR_INTERVAL_LIMIT.END
+    ) {
+      throw new AppError('Appointment only should be created between 8h (8am) and 17h (5pm)');
+    }
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(appointmentDate);
 

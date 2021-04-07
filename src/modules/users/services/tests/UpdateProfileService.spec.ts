@@ -53,7 +53,7 @@ describe('UpdateProfile', () => {
       email: 'aerithflowergirl@example.com'
     };
 
-    expect(updateProfileService.execute(userToUpdate)).rejects.toBeInstanceOf(AppError);
+    await expect(updateProfileService.execute(userToUpdate)).rejects.toBeInstanceOf(AppError);
   });
   it('should not be able to change the email to already usage email', async () => {
     await mockUsersRepository.create({
