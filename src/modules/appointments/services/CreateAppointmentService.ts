@@ -30,9 +30,7 @@ class CreateAppointmentService {
   }: ICreateAppointmentDTO): Promise<Appointement> {
     const appointmentDate = startOfHour(date);
 
-    if (isBefore(appointmentDate, Date.now())) {
-      throw new AppError('Cannot create an appointment on a past date');
-    }
+    await this.checkPastDate(appointmentDate);
 
     await this.checkEqualityBetweenProviderAndUser(user_id, provider_id);
 
@@ -56,6 +54,12 @@ class CreateAppointmentService {
       user_id,
       date: appointmentDate
     });
+  }
+
+  private async checkPastDate(dateForAppointment: Date): Promise<void> {
+    if (isBefore(dateForAppointment, Date.now())) {
+      throw new AppError('Cannot create an appointment on a past date');
+    }
   }
 
   private async checkEqualityBetweenProviderAndUser(
