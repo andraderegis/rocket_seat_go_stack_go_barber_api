@@ -34,9 +34,7 @@ class CreateAppointmentService {
       throw new AppError('Cannot create an appointment on a past date');
     }
 
-    if (user_id === provider_id) {
-      throw new AppError('Cannot create appointment with provider_id and user_id as same value');
-    }
+    await this.checkEqualityBetweenProviderAndUser(user_id, provider_id);
 
     const appointmentHour = getHours(appointmentDate);
 
@@ -58,6 +56,15 @@ class CreateAppointmentService {
       user_id,
       date: appointmentDate
     });
+  }
+
+  private async checkEqualityBetweenProviderAndUser(
+    user_id: string,
+    provider_id: string
+  ): Promise<void> {
+    if (user_id === provider_id) {
+      throw new AppError('Cannot create appointment with provider_id and user_id as same value');
+    }
   }
 }
 
