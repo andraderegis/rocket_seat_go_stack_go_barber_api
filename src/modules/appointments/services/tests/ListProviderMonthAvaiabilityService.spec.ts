@@ -20,6 +20,7 @@ describe('ListProviderMonthAvailability', () => {
   it('should be able to list the month availabitiy from provider between 8 at 18 hours', async () => {
     /** appointment beyond of desire month */
     await mockAppointmentsRepository.create({
+      user_id: 'user-id',
       date: new Date(2021, 4, 6, 11, 0, 0),
       provider_id: 'user'
     });
@@ -29,6 +30,7 @@ describe('ListProviderMonthAvailability', () => {
     for (let hour = 8; hour <= 18; hour += 1) {
       createAppointments.push(
         mockAppointmentsRepository.create({
+          user_id: 'user-id',
           date: new Date(2021, 3, 5, hour, 0, 0),
           provider_id: 'user'
         })

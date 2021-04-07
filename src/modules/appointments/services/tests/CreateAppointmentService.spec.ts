@@ -14,6 +14,7 @@ describe('CreateAppointment', () => {
   });
   it('should be able to create a new appointment', async () => {
     const appointmentToCreate = {
+      user_id: 'user-id',
       date: new Date(2021, 2, 30, 19),
       provider_id: '123123'
     };
@@ -28,6 +29,7 @@ describe('CreateAppointment', () => {
     const appointmentDate = new Date(2021, 2, 30, 19);
 
     const appointmentToCreate = {
+      user_id: 'user-id',
       date: appointmentDate,
       provider_id: '123123'
     };

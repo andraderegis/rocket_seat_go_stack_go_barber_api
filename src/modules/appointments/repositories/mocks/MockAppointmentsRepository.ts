@@ -12,11 +12,12 @@ const TO_INCREMENT_FOR_JAVASCRIPT_DATE_FORMAT = 1;
 class MockAppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
 
-  public async create({ provider_id, date }: ICreateAppointmentDTO): Promise<Appointment> {
+  public async create({ provider_id, user_id, date }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = Object.assign(new Appointment(), {
       id: uuid(),
       date,
-      provider_id
+      provider_id,
+      user_id
     });
 
     this.appointments.push(appointment);

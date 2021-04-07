@@ -15,10 +15,14 @@ class CreateAppointmentService {
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
     private appointmentRepository: IAppointmentsRepository
   ) {
-    // eslint-disable-next-line prettier/prettier
+    //
   }
 
-  public async execute({ provider_id, date }: ICreateAppointmentDTO): Promise<Appointement> {
+  public async execute({
+    provider_id,
+    user_id,
+    date
+  }: ICreateAppointmentDTO): Promise<Appointement> {
     const appointmentDate = startOfHour(date);
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(appointmentDate);
@@ -29,6 +33,7 @@ class CreateAppointmentService {
 
     return this.appointmentRepository.create({
       provider_id,
+      user_id,
       date: appointmentDate
     });
   }

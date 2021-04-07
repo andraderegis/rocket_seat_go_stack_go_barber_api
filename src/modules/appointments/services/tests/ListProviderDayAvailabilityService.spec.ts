@@ -19,11 +19,13 @@ describe('ListProviderMonthAvailability', () => {
   });
   it('should be able to list the hours availabitiy in day from provider', async () => {
     await mockAppointmentsRepository.create({
+      user_id: 'user-id',
       date: new Date(2021, 3, 6, 14, 0, 0),
       provider_id: 'user'
     });
 
     await mockAppointmentsRepository.create({
+      user_id: 'user-id',
       date: new Date(2021, 3, 6, 15, 0, 0),
       provider_id: 'user'
     });
