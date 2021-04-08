@@ -9,8 +9,6 @@ const appointmentsController = new AppointmentsControler();
 
 appointmentsRouter.use(ensureAuthenticatedMiddleware);
 
-appointmentsRouter.get('/', appointmentsController.list);
-
 appointmentsRouter.post('/', appointmentsController.create);
 
 export default appointmentsRouter;

@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { parseISO } from 'date-fns';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
-import AppointmentRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
 import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
 
 class AppointmentsControler implements ICreateController {
@@ -23,14 +22,6 @@ class AppointmentsControler implements ICreateController {
     });
 
     return response.status(201).json(appointment);
-  }
-
-  public async list(_: Request, response: Response): Promise<Response> {
-    const appointmentRespository = new AppointmentRepository();
-
-    const appointments = await appointmentRespository.find();
-
-    return response.status(200).json(appointments);
   }
 }
 
