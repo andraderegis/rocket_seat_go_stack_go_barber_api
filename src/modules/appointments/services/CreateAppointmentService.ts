@@ -38,11 +38,7 @@ class CreateAppointmentService {
 
     await this.checkAllowedAppointmentHourInterval(appointmentHour);
 
-    const findAppointmentInSameDate = await this.appointmentRepository.findByDate(appointmentDate);
-
-    if (findAppointmentInSameDate) {
-      throw new AppError('This appointment is already booked');
-    }
+    await this.checkAppointmentAlreadyBooked(appointmentDate);
 
     return this.appointmentRepository.create({
       provider_id,
@@ -72,6 +68,16 @@ class CreateAppointmentService {
       appointmentHour > APPOINTMENT_HOUR_INTERVAL_LIMIT.END
     ) {
       throw new AppError('Appointment only should be created between 8h (8am) and 17h (5pm)');
+    }
+  }
+
+  private async checkAppointmentAlreadyBooked(dateForAppointment: Date): Promise<void> {
+    const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
+      dateForAppointment
+    );
+
+    if (findAppointmentInSameDate) {
+      throw new AppError('This appointment is already booked');
     }
   }
 }
