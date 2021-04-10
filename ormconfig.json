@@ -17,8 +17,9 @@
     }
   },
   {
+    "name": "mongo",
     "type": "mongodb",
-    "host": "mongodb",
+    "host": "localhost",
     "port": 27017,
     "database": "gostack_gobarber",
     "useUnifiedTopology": true,
