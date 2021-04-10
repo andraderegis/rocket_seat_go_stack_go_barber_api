@@ -5,6 +5,9 @@ import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
 
+import INotificationRepository from '@modules/notifications/repositories/INotificationsRepository';
+import NotificationRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository';
+
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
@@ -31,6 +34,11 @@ import DiskStorageProvider from '@shared/providers/storage/implementations/DiskS
 container.registerSingleton<IAppointmentsRepository>(
   CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT,
   AppointmentsRepository
+);
+
+container.registerSingleton<INotificationRepository>(
+  CONTAINER_NAME_DEPENDENCIES.REPOSITORY.NOTIFICATION,
+  NotificationRepository
 );
 
 container.registerSingleton<IUsersRepository>(

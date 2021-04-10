@@ -17,6 +17,7 @@ export const CONTAINER_NAME_DEPENDENCIES = {
   },
   REPOSITORY: {
     APPOINTMENT: 'AppointmentsRepository',
+    NOTIFICATION: 'NotificationRepository',
     USERS: 'UsersRepository',
     USER_TOKENS: 'UserTokensRepository'
   },

@@ -1,13 +1,14 @@
-import { getHours, isBefore, startOfHour } from 'date-fns';
+import { format, getHours, isBefore, startOfHour } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
 import AppError from '@shared/errors/AppError';
 
-import Appointement from '@modules/appointments/infra/typeorm/entities/Appointment';
+import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
+import INotificationRepository from '@modules/notifications/repositories/INotificationsRepository';
 
 const APPOINTMENT_HOUR_INTERVAL_LIMIT = {
   START: 8,
@@ -18,7 +19,10 @@ const APPOINTMENT_HOUR_INTERVAL_LIMIT = {
 class CreateAppointmentService {
   constructor(
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
-    private appointmentRepository: IAppointmentsRepository
+    private appointmentRepository: IAppointmentsRepository,
+
+    @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.NOTIFICATION)
+    private notificationsRepository: INotificationRepository
   ) {
     //
   }
@@ -27,7 +31,7 @@ class CreateAppointmentService {
     provider_id,
     user_id,
     date
-  }: ICreateAppointmentDTO): Promise<Appointement> {
+  }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
 
     await this.checkPastDate(appointmentDate);
@@ -44,11 +48,15 @@ class CreateAppointmentService {
 
     await this.checkAppointmentAlreadyBooked(appointmentDate, this.appointmentRepository);
 
-    return this.appointmentRepository.create({
+    const appointment = await this.appointmentRepository.create({
       provider_id,
       user_id,
       date: appointmentDate
     });
+
+    await this.sendNotification(this.notificationsRepository, appointmentDate, provider_id);
+
+    return appointment;
   }
 
   private async checkPastDate(dateForAppointment: Date): Promise<void> {
@@ -85,6 +93,19 @@ class CreateAppointmentService {
     if (findAppointmentInSameDate) {
       throw new AppError('This appointment is already booked');
     }
+  }
+
+  private async sendNotification(
+    repository: INotificationRepository,
+    appointmentDate: Date,
+    recipient_id: string
+  ): Promise<void> {
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm");
+
+    await repository.create({
+      recipient_id,
+      content: `Novo agendamento para dia ${dateFormatted}`
+    });
   }
 }
 

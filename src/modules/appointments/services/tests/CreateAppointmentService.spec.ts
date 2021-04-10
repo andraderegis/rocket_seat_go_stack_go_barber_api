@@ -1,16 +1,24 @@
 import MockAppointmentsRepository from '@modules/appointments/repositories/mocks/MockAppointmentsRepository';
+import MockNotificationsRepository from '@modules/notifications/infra/typeorm/repositories/mocks/MockNotificationsRepository';
 import AppError from '@shared/errors/AppError';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
+
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import INotificationRepository from '@modules/notifications/repositories/INotificationsRepository';
 
 let mockAppointmentsRepository: IAppointmentsRepository;
+let mockNotificationRepository: INotificationRepository;
 let createAppointmentService: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
   beforeEach(() => {
     mockAppointmentsRepository = new MockAppointmentsRepository();
+    mockNotificationRepository = new MockNotificationsRepository();
 
-    createAppointmentService = new CreateAppointmentService(mockAppointmentsRepository);
+    createAppointmentService = new CreateAppointmentService(
+      mockAppointmentsRepository,
+      mockNotificationRepository
+    );
   });
   it('should be able to create a new appointment', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
