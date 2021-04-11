@@ -47,7 +47,7 @@ export const MAIL = {
     }
   },
   DRIVER: {
-    ETHEREAL: 'Ethereal',
-    SES: 'SES'
+    ETHEREAL: 'ethereal',
+    SES: 'ses'
   }
 };

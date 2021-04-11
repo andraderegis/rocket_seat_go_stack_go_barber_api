@@ -1,8 +1,10 @@
 import { container } from 'tsyringe';
 
-import { CONTAINER_NAME_DEPENDENCIES, MAIL } from '@shared/constants';
+import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
-import mailConfig from '@config/mail';
+import '@shared/providers/mail-template/container';
+import '@shared/providers/mail/container';
+import '@shared/providers/storage/container';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
@@ -19,15 +21,8 @@ import UserTokensRepository from '@modules/users/infra/typeorm/repositories/User
 import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import BCryptHashProvider from '@modules/users/providers/hash/implementations/BCryptHashProvider';
 
-import IMailProvider from '@shared/providers/mail/interfaces/IMailProvider';
-import EtherealMailProvider from '@shared/providers/mail/implementations/EtherealMailProvider';
-import SESMailProvider from '@shared/providers/mail/implementations/SESMailProvider';
-
-import IMailTemplateProvider from '@shared/providers/mail-template/interfaces/IMailTemplateProvider';
-import HandlebarsMailTemplateProvider from '@shared/providers/mail-template/implementations/HandlebarsMailTemplateProvider';
-
-import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
-import DiskStorageProvider from '@shared/providers/storage/implementations/DiskStorageProvider';
+// import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
+// import DiskStorageProvider from '@shared/providers/storage/implementations/DiskStorageProvider';
 
 /*
  - registerSingleton: only create a instance when it is required for usage
@@ -54,23 +49,12 @@ container.registerSingleton<IUserTokensRepository>(
   UserTokensRepository
 );
 
-container.registerSingleton<IMailTemplateProvider>(
-  CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL_TEMPLATE,
-  HandlebarsMailTemplateProvider
-);
-
-container.registerInstance<IMailProvider>(
-  CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL,
-  mailConfig.driver === MAIL.DRIVER.ETHEREAL
-    ? container.resolve(EtherealMailProvider)
-    : container.resolve(SESMailProvider)
-);
-
 container.registerSingleton<IHashProvider>(
   CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH,
   BCryptHashProvider
 );
-container.registerSingleton<IStorageProvider>(
-  CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE.DISK,
-  DiskStorageProvider
-);
+
+// container.registerSingleton<IStorageProvider>(
+//   CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE.DISK,
+//   DiskStorageProvider
+// );
