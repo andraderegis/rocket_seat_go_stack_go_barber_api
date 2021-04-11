@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { celebrate, Joi, Segments } from 'celebrate';
 
 import ProviderAppointmentsController from '@modules/appointments/infra/http/controllers/ProviderAppointmentsController';
 import ProvidersController from '@modules/appointments/infra/http/controllers/ProvidersController';
@@ -19,11 +20,39 @@ providersRouter.get('/', providersController.index);
 
 providersRouter.get(
   '/:id/availability/day/:day/month/:month/year/:year',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+      day: Joi.number().required(),
+      month: Joi.number().required(),
+      year: Joi.number().required()
+    }
+  }),
   providerDayAvailability.index
 );
 
-providersRouter.get('/:id/availability/month/:month/year/:year', providerMonthAvailability.index);
+providersRouter.get(
+  '/:id/availability/month/:month/year/:year',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+      month: Joi.number().required(),
+      year: Joi.number().required()
+    }
+  }),
+  providerMonthAvailability.index
+);
 
-providersRouter.get('/appointments/day/:day/month/:month/year/:year', providerAppointments.index);
+providersRouter.get(
+  '/appointments/day/:day/month/:month/year/:year',
+  celebrate({
+    [Segments.PARAMS]: {
+      day: Joi.number().required(),
+      month: Joi.number().required(),
+      year: Joi.number().required()
+    }
+  }),
+  providerAppointments.index
+);
 
 export default providersRouter;
