@@ -1,5 +1,6 @@
 import { container } from 'tsyringe';
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
 
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 import ShowProfileService from '@modules/users/services/ShowProfileService';
@@ -17,9 +18,7 @@ class ProfileController implements IGetController, IUpdateController {
       user_id
     });
 
-    delete user.password;
-
-    return response.status(200).json(user);
+    return response.status(200).json(classToClass(user));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -37,9 +36,7 @@ class ProfileController implements IGetController, IUpdateController {
       old_password
     });
 
-    delete user.password;
-
-    return response.status(200).json(user);
+    return response.status(200).json(classToClass(user));
   }
 }
 

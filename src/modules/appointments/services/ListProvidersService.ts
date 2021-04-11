@@ -1,8 +1,9 @@
-import User from '@modules/users/infra/typeorm/entities/User';
-
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
+
+import User from '@modules/users/infra/typeorm/entities/User';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IListProviderDTO from '@modules/users/dtos/IShowProfileDTO';
@@ -23,11 +24,7 @@ class ListProfileService implements IListProviderService {
     });
 
     return users.map(user => {
-      const userWithoutPassword = user;
-
-      delete userWithoutPassword.password;
-
-      return userWithoutPassword;
+      return classToClass(user);
     });
   }
 }

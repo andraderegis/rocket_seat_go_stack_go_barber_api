@@ -14,8 +14,6 @@ class UserAvatarController implements IUpdateController {
       avatarFileName: request.file.filename
     });
 
-    delete user.password;
-
     return response.json(user);
   }
 }
