@@ -1,6 +1,8 @@
 import { container } from 'tsyringe';
 
-import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
+import { CONTAINER_NAME_DEPENDENCIES, MAIL } from '@shared/constants';
+
+import mailConfig from '@config/mail';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
@@ -19,6 +21,7 @@ import BCryptHashProvider from '@modules/users/providers/hash/implementations/BC
 
 import IMailProvider from '@shared/providers/mail/interfaces/IMailProvider';
 import EtherealMailProvider from '@shared/providers/mail/implementations/EtherealMailProvider';
+import SESMailProvider from '@shared/providers/mail/implementations/SESMailProvider';
 
 import IMailTemplateProvider from '@shared/providers/mail-template/interfaces/IMailTemplateProvider';
 import HandlebarsMailTemplateProvider from '@shared/providers/mail-template/implementations/HandlebarsMailTemplateProvider';
@@ -58,7 +61,9 @@ container.registerSingleton<IMailTemplateProvider>(
 
 container.registerInstance<IMailProvider>(
   CONTAINER_NAME_DEPENDENCIES.PROVIDER.MAIL,
-  container.resolve(EtherealMailProvider)
+  mailConfig.driver === MAIL.DRIVER.ETHEREAL
+    ? container.resolve(EtherealMailProvider)
+    : container.resolve(SESMailProvider)
 );
 
 container.registerSingleton<IHashProvider>(

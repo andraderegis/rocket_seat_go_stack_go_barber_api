@@ -45,5 +45,9 @@ export const MAIL = {
       DEFAULT_NAME: 'Equipe GoBarber',
       DEFAULT_ADDRESS: 'equipe@gobarber.com.br'
     }
+  },
+  DRIVER: {
+    ETHEREAL: 'Ethereal',
+    SES: 'SES'
   }
 };
