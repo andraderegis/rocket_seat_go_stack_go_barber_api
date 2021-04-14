@@ -7,12 +7,16 @@ import Appointement from '@modules/appointments/infra/typeorm/entities/Appointme
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import IListProviderAppointmentsService from '@modules/appointments/services/interfaces/IListProviderAppointmentsService';
 import IListProviderAppointmentsDTO from '@modules/appointments/dtos/IListProviderAppointmentsDTO';
+import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
 
 @injectable()
 class ListProviderAppointmentsService implements IListProviderAppointmentsService {
   constructor(
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.APPOINTMENT)
-    private appointmentsRespository: IAppointmentsRepository
+    private appointmentsRespository: IAppointmentsRepository,
+
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.CACHE)
+    private cacheProvider: ICacheProvider
   ) {
     //
   }

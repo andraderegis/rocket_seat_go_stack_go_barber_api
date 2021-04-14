@@ -3,18 +3,22 @@ import 'reflect-metadata';
 import MockUsersRepository from '@modules/users/repositories/mocks/MockUsersRespository';
 
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
+import RedisCacheProvider from '@shared/providers/cache/implementations/RedisCacheProvider';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
 
 let mockUsersRepository: IUsersRepository;
+let mockCacheProvider: ICacheProvider;
 
 let listProvidersService: ListProvidersService;
 
 describe('ShowProfile', () => {
   beforeEach(() => {
     mockUsersRepository = new MockUsersRepository();
+    mockCacheProvider = new RedisCacheProvider();
 
-    listProvidersService = new ListProvidersService(mockUsersRepository);
+    listProvidersService = new ListProvidersService(mockUsersRepository, mockCacheProvider);
   });
   it('should be able to list the providers', async () => {
     const user1 = await mockUsersRepository.create({
