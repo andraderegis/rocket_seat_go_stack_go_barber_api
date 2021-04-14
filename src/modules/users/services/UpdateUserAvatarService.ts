@@ -16,7 +16,7 @@ class UpdateUserAvatarService {
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.USERS)
     private usersRepository: IUsersRepository,
 
-    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE.DISK)
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE)
     private storageProvider: IStorageProvider
   ) {
     //

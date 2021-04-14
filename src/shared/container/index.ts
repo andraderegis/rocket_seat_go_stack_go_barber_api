@@ -5,6 +5,7 @@ import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 import '@shared/providers/mail-template/container';
 import '@shared/providers/mail/container';
 import '@shared/providers/storage/container';
+import '@shared/providers/file-source-storage/container';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
@@ -20,9 +21,6 @@ import UserTokensRepository from '@modules/users/infra/typeorm/repositories/User
 
 import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import BCryptHashProvider from '@modules/users/providers/hash/implementations/BCryptHashProvider';
-
-// import IStorageProvider from '@shared/providers/storage/interfaces/IStorageProvider';
-// import DiskStorageProvider from '@shared/providers/storage/implementations/DiskStorageProvider';
 
 /*
  - registerSingleton: only create a instance when it is required for usage
@@ -53,8 +51,3 @@ container.registerSingleton<IHashProvider>(
   CONTAINER_NAME_DEPENDENCIES.PROVIDER.HASH,
   BCryptHashProvider
 );
-
-// container.registerSingleton<IStorageProvider>(
-//   CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE.DISK,
-//   DiskStorageProvider
-// );

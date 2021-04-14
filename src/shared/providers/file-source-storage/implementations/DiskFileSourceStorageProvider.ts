@@ -1,4 +1,4 @@
-import IFileSourceStorageProvider from '@shared/providers/storage/interfaces/IFileSourceStorageProvider';
+import IFileSourceStorageProvider from '@shared/providers/file-source-storage/interfaces/IFileSourceStorageProvider';
 
 class DiskFileSourceStorageProvider implements IFileSourceStorageProvider {
   public url(filename?: string): string {

@@ -11,7 +11,7 @@ import { Exclude, Expose } from 'class-transformer';
 
 import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
-import IFileSourceStorageProvider from '@shared/providers/storage/interfaces/IFileSourceStorageProvider';
+import IFileSourceStorageProvider from '@shared/providers/file-source-storage/interfaces/IFileSourceStorageProvider';
 
 @Entity('users')
 class User {
@@ -39,11 +39,15 @@ class User {
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
-    const fileSourceStorage: IFileSourceStorageProvider = container.resolve(
-      CONTAINER_NAME_DEPENDENCIES.PROVIDER.FILE_SOURCE_STORAGE
-    );
+    try {
+      const fileSourceStorage: IFileSourceStorageProvider = container.resolve(
+        CONTAINER_NAME_DEPENDENCIES.PROVIDER.FILE_SOURCE_STORAGE
+      );
 
-    return this.avatar ? fileSourceStorage.url(this.avatar) : null;
+      return this.avatar && fileSourceStorage ? fileSourceStorage.url(this.avatar) : null;
+    } catch {
+      return null;
+    }
   }
 }
 
