@@ -6,7 +6,12 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 
+import { container } from 'tsyringe';
 import { Exclude, Expose } from 'class-transformer';
+
+import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
+
+import IFileSourceStorageProvider from '@shared/providers/file-source-storage/interfaces/IFileSourceStorageProvider';
 
 @Entity('users')
 class User {
@@ -34,7 +39,15 @@ class User {
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
-    return this.avatar ? `${process.env.APP_API_URL}/files/${this.avatar}` : null;
+    try {
+      const fileSourceStorage: IFileSourceStorageProvider = container.resolve(
+        CONTAINER_NAME_DEPENDENCIES.PROVIDER.FILE_SOURCE_STORAGE
+      );
+
+      return this.avatar && fileSourceStorage ? fileSourceStorage.url(this.avatar) : null;
+    } catch {
+      return null;
+    }
   }
 }
 

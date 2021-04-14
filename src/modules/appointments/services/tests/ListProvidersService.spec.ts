@@ -39,6 +39,11 @@ describe('ShowProfile', () => {
       user_id: loggedUser.id
     });
 
-    expect(providers).toEqual([user1, user2]);
+    expect(providers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: user1.name, email: user1.email }),
+        expect.objectContaining({ name: user2.name, email: user2.email })
+      ])
+    );
   });
 });

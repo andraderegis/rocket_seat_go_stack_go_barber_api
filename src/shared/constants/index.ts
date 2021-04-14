@@ -5,12 +5,11 @@ export const CONTAINER_NAME_DEPENDENCIES = {
     }
   },
   PROVIDER: {
+    FILE_SOURCE_STORAGE: 'FileSourceStorage',
     HASH: 'HashProvider',
     MAIL: 'MailProvider',
     MAIL_TEMPLATE: 'MailTemplateProvider',
-    STORAGE: {
-      DISK: 'DiskStorageProvider'
-    },
+    STORAGE: 'StorageProvider',
     TOKEN: {
       USER: 'UserTokensRepository'
     }
