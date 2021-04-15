@@ -14,8 +14,6 @@ const providers = {
   s3: S3StorageProvider
 };
 
-console.log({ storageConfig });
-
 container.registerSingleton<IStorageProvider>(
   CONTAINER_NAME_DEPENDENCIES.PROVIDER.STORAGE,
   providers[storageConfig.driver]

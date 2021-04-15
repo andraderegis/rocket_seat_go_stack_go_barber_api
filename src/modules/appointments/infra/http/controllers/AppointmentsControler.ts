@@ -1,6 +1,5 @@
 import { container } from 'tsyringe';
 import { Request, Response } from 'express';
-import { parseISO } from 'date-fns';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 import ICreateController from '@shared/infra/http/controllers/interfaces/express/ICreateController';
@@ -11,12 +10,10 @@ class AppointmentsControler implements ICreateController {
 
     const { provider_id, date } = request.body;
 
-    const parsedDate = parseISO(date);
-
     const createAppointmentService = container.resolve(CreateAppointmentService);
 
     const appointment = await createAppointmentService.execute({
-      date: parsedDate,
+      date,
       provider_id,
       user_id
     });

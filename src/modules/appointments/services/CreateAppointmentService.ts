@@ -1,12 +1,14 @@
 import { format, getHours, isBefore, startOfHour } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
-import { CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
+import { CACHE, CONTAINER_NAME_DEPENDENCIES } from '@shared/constants';
 
 import AppError from '@shared/errors/AppError';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
+
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import INotificationRepository from '@modules/notifications/repositories/INotificationsRepository';
 
@@ -22,7 +24,10 @@ class CreateAppointmentService {
     private appointmentRepository: IAppointmentsRepository,
 
     @inject(CONTAINER_NAME_DEPENDENCIES.REPOSITORY.NOTIFICATION)
-    private notificationsRepository: INotificationRepository
+    private notificationsRepository: INotificationRepository,
+
+    @inject(CONTAINER_NAME_DEPENDENCIES.PROVIDER.CACHE)
+    private cacheProvider: ICacheProvider
   ) {
     //
   }
@@ -55,6 +60,13 @@ class CreateAppointmentService {
     });
 
     await this.sendNotification(this.notificationsRepository, appointmentDate, provider_id);
+
+    await this.cacheProvider.invalidate(
+      `${CACHE.PREFIX_KEY.PROVIDERS.APPOINTMENTS}:${provider_id}:${format(
+        appointmentDate,
+        'yyyy-M-d'
+      )}`
+    );
 
     return appointment;
   }

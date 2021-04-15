@@ -1,3 +1,12 @@
+export const CACHE = {
+  PREFIX_KEY: {
+    PROVIDERS: {
+      LIST: 'providers-list',
+      APPOINTMENTS: 'provider-appointments'
+    }
+  }
+};
+
 export const CONTAINER_NAME_DEPENDENCIES = {
   CONTROLLER: {
     USER: {
@@ -5,6 +14,7 @@ export const CONTAINER_NAME_DEPENDENCIES = {
     }
   },
   PROVIDER: {
+    CACHE: 'CacheProvider',
     FILE_SOURCE_STORAGE: 'FileSourceStorage',
     HASH: 'HashProvider',
     MAIL: 'MailProvider',

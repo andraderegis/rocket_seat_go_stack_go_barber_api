@@ -6,15 +6,21 @@ import ListProviderAppointmentsService from '@modules/appointments/services/List
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import IListProviderAppointmentsService from '@modules/appointments/services/interfaces/IListProviderAppointmentsService';
+import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
+import MockCacheProvider from '@shared/providers/cache/mocks/MockCacheProvider';
 
 let mockAppointmentsRepository: IAppointmentsRepository;
+let mockCacheProvider: ICacheProvider;
 let listProvidersDayAvailabilityService: IListProviderAppointmentsService;
 
 describe('ListProviderAppointments', () => {
   beforeEach(() => {
     mockAppointmentsRepository = new MockAppointmentsRepository();
+    mockCacheProvider = new MockCacheProvider();
+
     listProvidersDayAvailabilityService = new ListProviderAppointmentsService(
-      mockAppointmentsRepository
+      mockAppointmentsRepository,
+      mockCacheProvider
     );
   });
   it('should be able to list provider appointments on a specific day', async () => {

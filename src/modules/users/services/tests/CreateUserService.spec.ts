@@ -7,16 +7,25 @@ import MockUsersRepository from '@modules/users/repositories/mocks/MockUsersResp
 import MockHashProvider from '@modules/users/providers/hash/mocks/MockHashProvider';
 import IHashProvider from '@modules/users/providers/hash/interfaces/IHashProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
+import MockCacheProvider from '@shared/providers/cache/mocks/MockCacheProvider';
 
 let mockHashProvider: IHashProvider;
+let mockCacheProvider: ICacheProvider;
 let mockUsersRepository: IUsersRepository;
 let createUserService: CreateUserService;
 
 describe('CreateUser', () => {
   beforeEach(() => {
     mockHashProvider = new MockHashProvider();
+    mockCacheProvider = new MockCacheProvider();
     mockUsersRepository = new MockUsersRepository();
-    createUserService = new CreateUserService(mockUsersRepository, mockHashProvider);
+
+    createUserService = new CreateUserService(
+      mockUsersRepository,
+      mockHashProvider,
+      mockCacheProvider
+    );
   });
   it('should be able to create a new user', async () => {
     const userToCreate = {
