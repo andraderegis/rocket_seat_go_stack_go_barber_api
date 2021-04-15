@@ -27,6 +27,8 @@ class ListProfileService implements IListProviderService {
       `${CACHE.PREFIX_KEY.PROVIDERS.LIST}:${user_id}`
     );
 
+    console.log({ users });
+
     if (!users) {
       users = await this.usersRepository.findAllProviders({
         except_user_id: user_id

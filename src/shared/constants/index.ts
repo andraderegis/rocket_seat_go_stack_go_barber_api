@@ -1,7 +1,8 @@
 export const CACHE = {
   PREFIX_KEY: {
     PROVIDERS: {
-      LIST: 'providers-list:'
+      LIST: 'providers-list',
+      APPOINTMENTS: 'provider-appointments'
     }
   }
 };

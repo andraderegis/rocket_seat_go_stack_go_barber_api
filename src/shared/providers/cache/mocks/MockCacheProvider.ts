@@ -1,17 +1,32 @@
 import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
 
 class MockCacheProvider implements ICacheProvider {
-  invalidate(key: string): Promise<void> {
-    return Promise.resolve();
+  private cache = new Map();
+
+  public async invalidatePrefix(prefix: string): Promise<void> {
+    this.cache.forEach((value: string, key: string) => {
+      if (key.startsWith(`${prefix}:`)) {
+        this.cache.delete(key);
+      }
+    });
   }
 
-  get<T>(key: string): Promise<T> {
-    const data = {} as T;
-    return Promise.resolve(data);
+  public async invalidate(key: string): Promise<void> {
+    this.cache.delete(key);
   }
 
-  save(key: string, value: any): Promise<void> {
-    return Promise.resolve();
+  public async get<T>(key: string): Promise<T> {
+    const data = this.cache.get(key);
+
+    if (!data) {
+      return null;
+    }
+
+    return JSON.parse(this.cache.get(key)) as T;
+  }
+
+  public async save(key: string, value: unknown): Promise<void> {
+    this.cache.set(key, JSON.stringify(value));
   }
 }
 

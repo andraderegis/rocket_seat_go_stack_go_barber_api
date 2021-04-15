@@ -6,7 +6,7 @@ import '@shared/providers/mail-template/container';
 import '@shared/providers/mail/container';
 import '@shared/providers/storage/container';
 import '@shared/providers/file-source-storage/container';
-import '@shared/providers/cache-provider/container';
+import '@shared/providers/cache/container';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';

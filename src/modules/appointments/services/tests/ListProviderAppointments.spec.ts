@@ -3,11 +3,11 @@ import 'reflect-metadata';
 import MockAppointmentsRepository from '@modules/appointments/repositories/mocks/MockAppointmentsRepository';
 
 import ListProviderAppointmentsService from '@modules/appointments/services/ListProviderAppointmentsService';
-import RedisCacheProvider from '@shared/providers/cache/implementations/RedisCacheProvider';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import IListProviderAppointmentsService from '@modules/appointments/services/interfaces/IListProviderAppointmentsService';
 import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
+import MockCacheProvider from '@shared/providers/cache/mocks/MockCacheProvider';
 
 let mockAppointmentsRepository: IAppointmentsRepository;
 let mockCacheProvider: ICacheProvider;
@@ -16,7 +16,7 @@ let listProvidersDayAvailabilityService: IListProviderAppointmentsService;
 describe('ListProviderAppointments', () => {
   beforeEach(() => {
     mockAppointmentsRepository = new MockAppointmentsRepository();
-    mockCacheProvider = new RedisCacheProvider();
+    mockCacheProvider = new MockCacheProvider();
 
     listProvidersDayAvailabilityService = new ListProviderAppointmentsService(
       mockAppointmentsRepository,

@@ -5,19 +5,24 @@ import CreateAppointmentService from '@modules/appointments/services/CreateAppoi
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import INotificationRepository from '@modules/notifications/repositories/INotificationsRepository';
+import ICacheProvider from '@shared/providers/cache/interfaces/ICacheProvider';
+import MockCacheProvider from '@shared/providers/cache/mocks/MockCacheProvider';
 
 let mockAppointmentsRepository: IAppointmentsRepository;
 let mockNotificationRepository: INotificationRepository;
+let mockCacheProvider: ICacheProvider;
 let createAppointmentService: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
   beforeEach(() => {
     mockAppointmentsRepository = new MockAppointmentsRepository();
     mockNotificationRepository = new MockNotificationsRepository();
+    mockCacheProvider = new MockCacheProvider();
 
     createAppointmentService = new CreateAppointmentService(
       mockAppointmentsRepository,
-      mockNotificationRepository
+      mockNotificationRepository,
+      mockCacheProvider
     );
   });
   it('should be able to create a new appointment', async () => {
