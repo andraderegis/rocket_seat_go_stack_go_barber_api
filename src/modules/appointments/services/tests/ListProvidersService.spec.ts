@@ -51,7 +51,7 @@ describe('ShowProfile', () => {
     );
   });
 
-  it('should be able to list the providers 2', async () => {
+  it('should be able to list the providers from cache', async () => {
     const user1 = await mockUsersRepository.create({
       name: 'Aerith Gainsborough',
       email: 'theflowergirl@example.com',
@@ -70,7 +70,9 @@ describe('ShowProfile', () => {
       password: '123456'
     });
 
-    jest.spyOn(mockCacheProvider, 'get').mockImplementationOnce(() => Promise.resolve(undefined));
+    jest
+      .spyOn(mockCacheProvider, 'get')
+      .mockImplementationOnce(() => Promise.resolve([user1, user2]));
 
     const providers = await listProvidersService.execute({
       user_id: loggedUser.id
