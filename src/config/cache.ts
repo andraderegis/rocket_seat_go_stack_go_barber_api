@@ -10,8 +10,10 @@ interface ICacheConfig {
 export default {
   driver: process.env.CACHE_DRIVER || 'redis',
   config: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
-    password: process.env.REDIS_PASSWORD || undefined
+    redis: {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: process.env.REDIS_PORT || 6379,
+      password: process.env.REDIS_PASSWORD || undefined
+    }
   }
 } as ICacheConfig;
