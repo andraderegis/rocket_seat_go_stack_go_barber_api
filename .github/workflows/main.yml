@@ -56,7 +56,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: | 
             cd ~/app/rocket_seat_go_stack_go_barber_api 
-            ./node_modules/.bin/typeorm migrations:run
+            ./node_modules/.bin/typeorm migration:run
             
       # Reiniciando pm2
       - name: Restart api process
