@@ -35,7 +35,7 @@ jobs:
           target: "app/rocket_seat_go_stack_go_barber_api"
       
       # Executar yarn na Digital Ocean
-      - name: Install dependencies on Digital Ocean
+      - name: Run scripts
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -45,26 +45,5 @@ jobs:
           script: | 
             cd ~/app/rocket_seat_go_stack_go_barber_api 
             yarn
-
-      # Executar migrations
-      - name: Run migrations
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: | 
-            cd ~/app/rocket_seat_go_stack_go_barber_api 
             ./node_modules/.bin/typeorm migration:run
-            
-      # Reiniciando pm2
-      - name: Restart api process
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: pm2 restart gobarber-api
-      
+            pm2 restart gobarber-api
