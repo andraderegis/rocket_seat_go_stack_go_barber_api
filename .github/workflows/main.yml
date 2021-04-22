@@ -30,8 +30,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          source: "dist"
-          target: "test"
+          source: "dist,tmp,.env,package.json,ormconfig.json,yarn.lock"
+          target: "app"
       
       # Copiar a pasta dist para dentro da Digial Ocean
       # Executar yarn na Digital Ocean
