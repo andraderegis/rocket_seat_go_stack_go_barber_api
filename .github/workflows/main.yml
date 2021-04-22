@@ -32,7 +32,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           source: "dist,tmp,package.json,yarn.lock"
-          target: "app/gobarber-api"
+          target: "app/rocket_seat_go_stack_go_barber_api"
       
       # Executar yarn na Digital Ocean
       - name: Install dependencies on Digital Ocean
