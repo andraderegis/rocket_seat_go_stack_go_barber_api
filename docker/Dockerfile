@@ -1,20 +1,16 @@
-# ----------- Base ----------- #
-FROM bitnami/node:14 AS base
+# ---------- Builder ---------- #
+FROM node:14-alpine AS builder
 
 WORKDIR /go_barber_api
 
-# ---------- Builder ---------- #
-FROM base AS builder
+COPY . .
 
-COPY package.json babel.config.js ormconfig.json jest.config.js jest.setup.js .env ./
-COPY ./src ./src
-COPY ./tmp ./tmp
-
-RUN npm install -g yarn && yarn
-RUN yarn build
+RUN yarn && yarn build
 
 # --------- Release --------- #
-FROM base AS release
+FROM node:14-alpine AS release
+
+WORKDIR /go_barber_api
 
 RUN npm install -g pm2
 
@@ -23,7 +19,3 @@ COPY --from=builder /go_barber_api/ormconfig.json ./ormconfig.json
 COPY --from=builder /go_barber_api/.env ./.env
 COPY --from=builder /go_barber_api/tmp ./tmp
 COPY --from=builder /go_barber_api/dist ./dist
-
-ENTRYPOINT [ "pm2-runtime", "start", "dist/shared/infra/http/server.js", "--name", "go_barber_api" ]
-
-
