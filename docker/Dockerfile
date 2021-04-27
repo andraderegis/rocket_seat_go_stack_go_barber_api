@@ -15,7 +15,12 @@ WORKDIR /go_barber_api
 RUN npm install -g pm2
 
 COPY --from=builder /go_barber_api/node_modules ./node_modules
-COPY --from=builder /go_barber_api/ormconfig.json ./ormconfig.json
+COPY --from=builder /go_barber_api/ormconfig.js ./ormconfig.js
 COPY --from=builder /go_barber_api/.env ./.env
+COPY --from=builder /go_barber_api/.env.example ./.env.example
+COPY --from=builder /go_barber_api/docker/go-barber-entrypoint.sh ./go-barber-entrypoint.sh
 COPY --from=builder /go_barber_api/tmp ./tmp
 COPY --from=builder /go_barber_api/dist ./dist
+
+RUN ["chmod", "+x", "/go_barber_api/go-barber-entrypoint.sh"]
+

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import 'dotenv/config';
+import '@config/environment';
 
 import express, { Request, Response, NextFunction } from 'express';
 import { errors } from 'celebrate';
