@@ -20,14 +20,6 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      # Executando os tests
-      - name: Run unit tests
-        run: yarn test
-
-      # Executar a build
-      - name: Run build
-        run: yarn build
-
       - name: Run pwd
         run: pwd
 
@@ -61,6 +53,13 @@ jobs:
           envkey_TYPEORM_ENTITIES_EXTENSION: ${{ secrets.TYPEORM_ENTITIES_EXTENSION }}
           envkey_TYPEORM_MIGRATIONS_EXTENSION: ${{ secrets.TYPEORM_MIGRATIONS_EXTENSION }}
           file_name: .env
+      # Executando os tests
+      - name: Run unit tests
+        run: yarn test
+
+      # Executar a build
+      - name: Run build
+        run: yarn build
 
       # Copiar a pasta dist para dentro da Digial Ocean
       - name: Copy build dist to Digital Ocean
