@@ -10,7 +10,7 @@ services:
       - "3333:3333"
     entrypoint:
       - sh
-      - go-barber-entrypoint.sh
+      - docker/go-barber-entrypoint.sh
     volumes:
       - go_barber:/app/
     build:
