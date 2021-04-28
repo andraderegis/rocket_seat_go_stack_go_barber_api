@@ -57,6 +57,7 @@ jobs:
 
       # Executar a build
       - name: Run Build
+        run: yarn build
 
       # Copiar a pasta dist para dentro da Digial Ocean
       - name: Copy Build to Digital Ocean
@@ -82,7 +83,6 @@ jobs:
             chown deployer:deployer ./docker/deploy.sh
             chmod 400 ./docker/deploy.sh
             ./docker/deploy.sh
-
 
 # name: CI
 
