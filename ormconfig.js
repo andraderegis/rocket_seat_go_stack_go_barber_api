@@ -24,7 +24,7 @@ module.exports = [
     database: "gobarber",
     useUnifiedTopology: true,
     entities: [
-      "./src/modules/**/infra/typeorm/schemas/*.ts"
+      `./${process.env.TYPEORM_ROOT_ENTITIES}/modules/**/infra/typeorm/schemas/*.${process.env.TYPEORM_ENTITIES_EXTENSION}`
     ]
   }
 ]
