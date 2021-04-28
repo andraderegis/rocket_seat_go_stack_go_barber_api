@@ -21,7 +21,7 @@ jobs:
         run: yarn
 
       # Criando .env a partir dos secrets
-      - name: Create .env file
+      - name: Create .env File
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_APP_API_URL: ${{ secrets.APP_API_URL }}
@@ -57,7 +57,6 @@ jobs:
 
       # Executar a build
       - name: Run Build
-        run: yarn build
 
       # Copiar a pasta dist para dentro da Digial Ocean
       - name: Copy Build to Digital Ocean
