@@ -27,8 +27,10 @@ services:
     container_name: postgres
     networks:
       - gobarber
+    expose:
+      - "35432"
     ports:
-      - "5432:5432"
+      - "35432:5432"
     build:
       context: ../docker/postgresql
       dockerfile: Dockerfile
@@ -45,8 +47,10 @@ services:
     container_name: mongodb
     networks:
       - gobarber
+    expose:
+      - "30290"
     ports:
-      - "27017:27017"
+      - "30290:27017"
     volumes:
       - mongo:/data/db
 
@@ -55,8 +59,10 @@ services:
     container_name: redis
     networks:
       - gobarber
+    expose:
+      - "9379"
     ports:
-      - "6379:6379"
+      - "9379:6379"
     volumes:
       - redis:/data
 
