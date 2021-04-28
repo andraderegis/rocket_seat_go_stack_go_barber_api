@@ -20,6 +20,7 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      # Exibindo diretório
       - name: Run pwd
         run: pwd
 
@@ -53,6 +54,7 @@ jobs:
           envkey_TYPEORM_ENTITIES_EXTENSION: ${{ secrets.TYPEORM_ENTITIES_EXTENSION }}
           envkey_TYPEORM_MIGRATIONS_EXTENSION: ${{ secrets.TYPEORM_MIGRATIONS_EXTENSION }}
           file_name: .env
+
       # Executando os tests
       - name: Run unit tests
         run: yarn test
