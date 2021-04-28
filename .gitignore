@@ -9,4 +9,5 @@ tmp/*
 coverage
 
 .env
+.env.workstation
 ormconfig.json

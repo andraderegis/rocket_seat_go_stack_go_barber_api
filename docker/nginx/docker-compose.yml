@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  web:
+    image: nginx
+    container_name: nginx
+    restart: unless-stopped
+    volumes:
+      - nginx:/etc/nginx/
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_PORT=80
+
+volumes:
+  nginx:
+
+networks:
+  gobarber:
+    driver: bridge
