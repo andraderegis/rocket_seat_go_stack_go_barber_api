@@ -13,6 +13,8 @@ services:
       - docker/go-barber-entrypoint.sh
     volumes:
       - go_barber:/app/
+      - go_barber_node_modules:/app/go_barber_api/node_modules
+      - yarn_cache:/yarn
     build:
       context: ../
       dockerfile: docker/Dockerfile
@@ -68,9 +70,11 @@ services:
 
 volumes:
   go_barber:
+  go_barber_node_modules:
   postgresql:
   mongo:
   redis:
+  yarn_cache:
 
 networks:
   gobarber:
