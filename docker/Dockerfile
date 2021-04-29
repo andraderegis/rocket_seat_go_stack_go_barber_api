@@ -1,11 +1,18 @@
 # ---------- Builder ---------- #
 FROM node:14-alpine AS builder
 
+ENV YARN_CACHE_FOLDER yarn
+
 WORKDIR /go_barber_api
 
 COPY . .
 
-RUN yarn && yarn build
+RUN mkdir -p $YARN_CACHE_FOLDER
+RUN yarn config set cache-folder $YARN_CACHE_FOLDER
+RUN (yarn check --integrity && yarn check --verify-tree) || yarn install --frozen-lockfile
+
+# RUN yarn && yarn build
+RUN yarn build
 
 # --------- Release --------- #
 FROM node:14-alpine AS release

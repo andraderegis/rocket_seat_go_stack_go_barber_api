@@ -71,6 +71,7 @@ volumes:
   postgresql:
   mongo:
   redis:
+  yarn_cache:
 
 networks:
   gobarber:
