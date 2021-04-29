@@ -49,6 +49,7 @@ jobs:
           envkey_POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
           envkey_MONGO_HOST: ${{ secrets.MONGO_HOST }}
           envkey_MONGO_PORT: ${{ secrets.MONGO_PORT }}
+          envkey_REDIS_HOST: ${{ secrets.REDIS_HOST }}
           envkey_REDIS_PORT: ${{ secrets.REDIS_PORT }}
           envkey_REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           envkey_TYPEORM_ROOT_ENTITIES: ${{ secrets.TYPEORM_ROOT_ENTITIES }}
