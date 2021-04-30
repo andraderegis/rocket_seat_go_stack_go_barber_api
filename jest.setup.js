@@ -1,3 +1,3 @@
-require('dotenv/config');
+require('@config/environment');
 
 jest.setTimeout(500);
