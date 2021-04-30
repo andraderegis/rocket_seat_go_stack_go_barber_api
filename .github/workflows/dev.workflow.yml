@@ -1,4 +1,4 @@
-name: Dev Workflow - Test and Build Application
+name: Dev Workflow
 
 on:
   push:
