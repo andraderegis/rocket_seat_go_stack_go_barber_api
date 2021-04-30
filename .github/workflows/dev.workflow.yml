@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: "14"
           check-latest: true
-        run: cp .env.example .env.test
+      - run: cp .env.example .env.test
 
       - name: Setup Cache Dependencies
         uses: actions/cache@v2
