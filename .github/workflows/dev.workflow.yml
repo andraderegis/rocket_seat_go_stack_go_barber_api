@@ -1,8 +1,8 @@
-name: Dev Workflow
+name: Dev Workflow - Test and Build Application
 
 on:
   push:
-    branches: [development]
+    branches: [develop]
 jobs:
   build:
     runs-on: ubuntu-latest
