@@ -58,6 +58,9 @@ jobs:
           envkey_TYPEORM_MIGRATIONS_EXTENSION: ${{ secrets.TYPEORM_MIGRATIONS_EXTENSION }}
           file_name: .env
 
+      - name: Create .env.test file
+        run: cp .env.example .env.test
+
       # Executando os tests
       - name: Run Unit Tests
         run: yarn test
