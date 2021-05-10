@@ -1,10 +1,10 @@
 name: Dev Workflow - Test and Build Application
 
 on:
-  push:
+  pull_request:
     branches: [develop]
 jobs:
-  build:
+  check-and-build:
     runs-on: ubuntu-latest
 
     steps:
