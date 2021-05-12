@@ -1,4 +1,6 @@
 .history
+.scannerwork
+
 dist
 yarn-error.log
 node_modules
