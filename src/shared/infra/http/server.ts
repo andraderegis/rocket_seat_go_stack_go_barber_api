@@ -18,13 +18,19 @@ import AppError from '@shared/errors/AppError';
 
 const app = express();
 
-app.use(rateLimiterMiddleware);
 app.use(cors());
 app.use(express.json());
+app.use(rateLimiterMiddleware);
 app.use('/files', express.static(uploadConfig.uploadFolder));
 app.use(routes);
 
 app.use(errors());
+
+app.get('/healthz', (_: Request, response: Response) => {
+  response.send({
+    server: 'ok'
+  });
+});
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {

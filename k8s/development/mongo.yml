@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: mongo
+  type: ClusterIP
+  ports:
+    - port: 30290
+      targetPort: 27017
+      name: tcp
+      protocol: TCP
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  serviceName: mongo
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+        version: DEV
+      annotations:
+        sidecar.istio.io/inject: "True"
+      # necessário executar o seguinte comando para injetar o sidecar via istio
+      # istioctl kube-inject -f k8s/development/mongo.yml | kubectl apply -f -
+    spec:
+      containers:
+        - name: mongo
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-volume
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-volume
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+# ---
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: mongo-virtual-service
+# spec:
+#   hosts:
+#     # nome do service declarado no kubernetes
+#     - mongo
+#   tcp:
+#     - route:
+#         - destination:
+#             host: mongo
+#             subset: development
+
+# ---
+# apiVersion: networking.istio.io/v1beta1
+# kind: DestinationRule
+# metadata:
+#   name: mongo-destination-rule
+# spec:
+#   # nome do service declarado no kubernetes
+#   host: mongo
+#   trafficPolicy:
+#     loadBalancer:
+#       simple: ROUND_ROBIN
+#   subsets:
+#     - name: development
+#       labels:
+#         version: DEV
+#       trafficPolicy:
+#         loadBalancer:
+#           simple: LEAST_CONN
