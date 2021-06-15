@@ -13,7 +13,7 @@ module.exports = [
       `./${process.env.TYPEORM_ROOT_MIGRATIONS}/shared/infra/typeorm/migrations/*.${process.env.TYPEORM_MIGRATIONS_EXTENSION}`
     ],
     cli: {
-      migrationsDir: "./src/shared/infra/typeorm/migrations"
+      migrationsDir: `./${process.env.TYPEORM_ROOT_MIGRATIONS}/shared/infra/typeorm/migrations`
     }
   },
   {
