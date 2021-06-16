@@ -28,14 +28,33 @@ spec:
       labels:
         app: gobarber-api-dev
         version: v1
-      annotations:
-        sidecar.istio.io/inject: "True"
-      # necessário executar o seguinte comando para injetar o sidecar via istio
-      # istioctl kube-inject -f k8s/development/go-barber-api.yml | kubectl apply -f -
     spec:
       containers:
         - name: gobarber-api-dev
-          image: andradereginaldo/gobarber_api:1.2.11-14-debian-buster
+          image: andradereginaldo/gobarber_api:1.5.0-14-debian-buster
+
+          startupProbe:
+            httpGet:
+              path: /readyz
+              port: 3333
+            periodSeconds: 3
+            failureThreshold: 10
+
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 3333
+            periodSeconds: 3
+            initialDelaySeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: 3333
+            periodSeconds: 5
+            failureThreshold: 5
+            initialDelaySeconds: 15
+
           resources:
             limits:
               memory: "128Mi"

@@ -26,9 +26,9 @@ app.use(routes);
 
 app.use(errors());
 
-app.get('/healthz', (_: Request, response: Response) => {
+app.get('/readyz', (_: Request, response: Response) => {
   response.send({
-    server: 'ok'
+    status: 'ok'
   });
 });
 
