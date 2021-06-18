@@ -9,7 +9,7 @@ spec:
   ports:
     - port: 9379
       targetPort: 6379
-      name: tcp
+      name: redis
       protocol: TCP
 
 ---

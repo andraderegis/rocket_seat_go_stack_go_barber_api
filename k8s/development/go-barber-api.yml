@@ -9,15 +9,18 @@ spec:
   ports:
     - port: 8002
       targetPort: 3333
-      nodePort: 30002
-      name: tcp
+      # nova porta definida, pois a porta 30002 foi apontada para o ingress gateway
+      nodePort: 30004
+      # porta do cluster
+      # nodePort: 30002
+      name: http
       protocol: TCP
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gobarber-api-dev
+  name: gobarber-api-dev-v1
 spec:
   selector:
     matchLabels:
@@ -27,7 +30,7 @@ spec:
     metadata:
       labels:
         app: gobarber-api-dev
-        version: v1
+        version: A
     spec:
       containers:
         - name: gobarber-api-dev
@@ -58,7 +61,69 @@ spec:
           resources:
             limits:
               memory: "128Mi"
-              cpu: "500m"
+              cpu: "250m"
+          ports:
+            - containerPort: 3333
+
+          envFrom:
+            - configMapRef:
+                name: gobarber-api-dev-env
+
+          volumeMounts:
+            - mountPath: "/go_barber/volume"
+              name: gobarber-api-dev-volume
+
+      volumes:
+        - name: gobarber-api-dev-volume
+          persistentVolumeClaim:
+            claimName: gobarber-api-dev-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gobarber-api-dev-v2
+spec:
+  selector:
+    matchLabels:
+      app: gobarber-api-dev
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gobarber-api-dev
+        version: B
+    spec:
+      containers:
+        - name: gobarber-api-dev
+          image: andradereginaldo/gobarber_api:1.5.0-14-debian-buster
+
+          startupProbe:
+            httpGet:
+              path: /readyz
+              port: 3333
+            periodSeconds: 3
+            failureThreshold: 10
+
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 3333
+            periodSeconds: 3
+            initialDelaySeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: 3333
+            periodSeconds: 5
+            failureThreshold: 5
+            initialDelaySeconds: 15
+
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
           ports:
             - containerPort: 3333
 
@@ -139,7 +204,90 @@ data:
   TYPEORM_ROOT_MIGRATIONS: "dist"
   TYPEORM_ENTITIES_EXTENSION: "js"
   TYPEORM_MIGRATIONS_EXTENSION: "js"
+
+---
+#gateway com domínio
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: gobarber-ingress-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: http2
+      hosts:
+        - "*.gobarber"
+
+---
+# virtual service com subdomínio
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: gobarber-api-auth-virtual-service
+spec:
+  hosts:
+    - "auth.gobarber"
+  gateways:
+    - "gobarber-ingress-gateway"
+  http:
+    - route:
+        - destination:
+            host: gobarber-api-service-dev
+            subset: v2
+
+---
+# virtual service com subdomínio
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: gobarber-api-services-virtual-service
+spec:
+  hosts:
+    - "services.gobarber"
+  gateways:
+    - "gobarber-ingress-gateway"
+  http:
+    - route:
+        - destination:
+            host: gobarber-api-service-dev
+            subset: v1
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: gobarber-api-destination-rule
+spec:
+  host: gobarber-api-service-dev
+  subsets:
+    - name: v1
+      labels:
+        version: A
+      trafficPolicy:
+        loadBalancer:
+          simple: LEAST_CONN
+        #circuit breaker
+        outlierDetection:
+          consecutiveGatewayErrors: 5
+          interval: 20s
+          baseEjectionTime: 30s
+          maxEjectionPercent: 100
+    - name: v2
+      labels:
+        version: B
+      trafficPolicy:
+        #circuit breaker
+        outlierDetection:
+          consecutiveGatewayErrors: 5
+          interval: 20s
+          baseEjectionTime: 30s
+          maxEjectionPercent: 100
 # ---
+# gateway sem domínio
 # apiVersion: networking.istio.io/v1beta1
 # kind: Gateway
 # metadata:
@@ -153,44 +301,42 @@ data:
 #         name: http
 #         protocol: http2
 #       hosts:
-#         #domínio que hospeda do istio. usando "*" ele permite todos. usar em ambiente local
-#         - "*.gobarber"
+#         - "*"
 
 # ---
+# virtual service sem domínio
 # apiVersion: networking.istio.io/v1beta1
 # kind: VirtualService
 # metadata:
-#   name: gobarber-api-service-v1
+#   name: gobarber-api-virtual-service
 # spec:
 #   hosts:
-#     # endereço do host declarado no gateway
-#     - "dev-api-v1.gobarber"
+#     - "*"
 #   gateways:
 #     - "gobarber-ingress-gateway"
 #   http:
 #     - match:
 #         - uri:
-#             prefix: "/"
+#             prefix: "/sessions"
+#       route:
+#         - destination:
+#             host: gobarber-api-service-dev
+#             subset: v2
+#     - match:
+#         - uri:
+#             prefix: "/providers"
 #       route:
 #         - destination:
 #             host: gobarber-api-service-dev
 #             subset: v1
+#     # router a partir de pesos em subsets
+#     # - route:
+#     #     - destination:
+#     #         host: gobarber-api-service-dev
+#     #         subset: v1
+#     #       weight: 80
+#     #     - destination:
+#     #         host: gobarber-api-service-dev
+#     #         subset: v2
+#     #       weight: 20
 
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: DestinationRule
-# metadata:
-#   name: gobarber-api-destination-rule
-# spec:
-#   # nome do service declarado no kubernetes
-#   host: gobarber-api-service-dev
-#   trafficPolicy:
-#     loadBalancer:
-#       simple: ROUND_ROBIN
-#   subsets:
-#     - name: v1
-#       labels:
-#         version: v1
-#       trafficPolicy:
-#         loadBalancer:
-#           simple: LEAST_CONN

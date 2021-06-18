@@ -9,7 +9,7 @@ spec:
   ports:
     - port: 30290
       targetPort: 27017
-      name: tcp
+      name: mongo
       protocol: TCP
 
 ---
