@@ -28,10 +28,6 @@ spec:
       labels:
         app: redis
         version: DEV
-      # annotations:
-      #   sidecar.istio.io/inject: "True"
-      # necessário executar o seguinte comando para injetar o sidecar via istio
-      # istioctl kube-inject -f k8s/development/postgres.yml | kubectl apply -f -
     spec:
       containers:
         - name: redis
@@ -49,36 +45,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: VirtualService
-# metadata:
-#   name: redis-virtual-service
-# spec:
-#   hosts:
-#     # nome do service declarado no kubernetes
-#     - redis
-#   tcp:
-#     - route:
-#         - destination:
-#             host: redis
-#             subset: development
-
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: DestinationRule
-# metadata:
-#   name: redis-destination-rule
-# spec:
-#   # nome do service declarado no kubernetes
-#   host: redis
-#   trafficPolicy:
-#     loadBalancer:
-#       simple: ROUND_ROBIN
-#   subsets:
-#     - name: development
-#       labels:
-#         version: DEV
-#       trafficPolicy:
-#         loadBalancer:
-#           simple: LEAST_CONN
