@@ -1,13 +1,22 @@
 import path from 'path';
+import fs from 'fs';
 
 import dotEnvSafe from 'dotenv-safe';
 
-dotEnvSafe.config({
-  allowEmptyValues: true,
-  path: path.resolve(
+console.log('NODE_ENV: ', process.env.NODE_ENV);
+
+if (process.env.NODE_ENV) {
+  const dotEnvFilePath = path.resolve(
     process.env.NODE_ENV
       ? path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`)
       : path.resolve(process.cwd(), '.env')
-  ),
-  example: path.resolve(process.cwd(), '.env.example')
-});
+  );
+
+  if (fs.existsSync(dotEnvFilePath)) {
+    dotEnvSafe.config({
+      allowEmptyValues: true,
+      path: dotEnvFilePath,
+      example: path.resolve(process.cwd(), '.env.example')
+    });
+  }
+}

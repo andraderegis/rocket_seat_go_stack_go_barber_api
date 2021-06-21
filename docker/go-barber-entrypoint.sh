@@ -1,5 +1,7 @@
 #!/bin/bash
-dockerize -wait tcp://postgres:5432 -wait tcp://mongo:27017 -wait tcp://redis:6379 -timeout 20s
+# dockerize -wait tcp://postgres:5432 -wait tcp://mongo:27017 -wait tcp://redis:6379 -timeout 20s
+
+dockerize -wait tcp://postgres:35432 -wait tcp://mongo:30290 -wait tcp://redis:9379 -timeout 20s
 
 ./node_modules/.bin/typeorm migration:run
 
